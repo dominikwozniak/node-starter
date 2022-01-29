@@ -1,0 +1,24 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+yarn format-lint ||
+(
+  echo 'Format Failed.';
+  false;
+)
+
+yarn check-format ||
+(
+  echo 'Prettier Check Failed.';
+  false;
+)
+
+# Check ESLint Standards
+yarn check-lint ||
+(
+  echo 'ESLint Check Failed.'
+  false;
+)
+
+# If everything passes... Now we can commit
+echo '✅✅✅'
