@@ -16,9 +16,9 @@ yarn check-format ||
 # Check ESLint Standards
 yarn check-lint ||
 (
-  echo 'ESLint Check Failed.'
+  echo 'ESLint Check Failed.';
   false;
 )
 
 # If everything passes... Now we can commit
-echo '✅✅✅'
+echo '✅✅✅';
