@@ -1,9 +1,15 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+yarn format ||
+(
+  echo 'Prettier Format Failed.';
+  false;
+)
+
 yarn format-lint ||
 (
-  echo 'Format Failed.';
+  echo 'Eslint Format Failed.';
   false;
 )
 
