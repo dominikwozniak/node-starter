@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server';
+import { gql } from 'apollo-server'
 
 export const userSchema = gql`
   type User {
@@ -12,7 +12,7 @@ export const userSchema = gql`
   extend type Query {
     allUsers: [User!]!
   }
-  
+
   extend type Mutation {
     registerUser(data: RegisterUserInput): User!
   }
@@ -22,4 +22,4 @@ export const userSchema = gql`
     name: String!
     password: String!
   }
-`;
+`

@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server';
+import { gql } from 'apollo-server'
 
 export const rootSchema = gql`
   type Query {
@@ -9,5 +9,10 @@ export const rootSchema = gql`
     root: String
   }
 
+  type Error {
+    path: String
+    message: String
+  }
+
   scalar DateTime
-`;
+`
