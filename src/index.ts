@@ -2,7 +2,6 @@ import dotenv from 'dotenv-safe'
 import express from 'express'
 import { ApolloServer } from 'apollo-server-express'
 import * as http from 'http'
-import { PrismaClient } from '@prisma/client'
 import {
   ApolloServerPluginDrainHttpServer,
   ApolloServerPluginLandingPageGraphQLPlayground,
@@ -13,11 +12,9 @@ import cors from 'cors'
 import session from 'express-session'
 import { schema } from '@src/utils/generateSchema'
 import { context } from '@src/context'
-import { sessionCookieId, sessionUserId } from '@src/constants/session.const';
+import { sessionCookieId } from '@src/constants/session.const'
 
 dotenv.config()
-
-const prisma = new PrismaClient()
 
 async function bootstrap() {
   const app = express()
@@ -25,17 +22,19 @@ async function bootstrap() {
 
   app.use(cookieParser())
   app.use(cors())
-  app.use(session({
-    name: sessionCookieId,
-    secret: process.env.SESSION_SECRET || '',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: false,
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-    },
-  }))
+  app.use(
+    session({
+      name: sessionCookieId,
+      secret: process.env.SESSION_SECRET || '',
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        httpOnly: true,
+        secure: false,
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+      },
+    })
+  )
 
   const server = new ApolloServer({
     schema,

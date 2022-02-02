@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { sessionUserId } from '@src/constants/session.const';
+import { sessionUserId } from '@src/constants/session.const'
 
 const prisma = new PrismaClient()
 
@@ -16,9 +16,9 @@ export const context = (ctx: Context) => {
 
   // @ts-ignore
   if (ctx.req.session[sessionUserId]) {
-  // @ts-ignore
-  context.userId = ctx.req.session[sessionUserId]
-}
+    // @ts-ignore
+    context.userId = ctx.req.session[sessionUserId]
+  }
 
   return context
 }
