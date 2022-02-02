@@ -16,4 +16,6 @@ model User {
   name      String
   confirmed Boolean   @default(false)
   password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }

@@ -3,5 +3,6 @@ type User {
   email: String
   name: String
   confirmed: Boolean
-  password: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
