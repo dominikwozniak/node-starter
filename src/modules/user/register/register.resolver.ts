@@ -2,7 +2,7 @@ import * as yup from 'yup'
 import argon2 from 'argon2'
 import { UserInputError } from 'apollo-server'
 import { Context } from '@src/context'
-import { RegisterUserInput } from '@src/input/user/register-user.input'
+import { RegisterUserInput } from '@src/modules/user/register/register-user.input'
 import { formatYupError } from '@src/utils/formatYupError'
 
 const registerUserSchema = yup.object().shape({
@@ -11,7 +11,8 @@ const registerUserSchema = yup.object().shape({
   password: yup.string().min(3).max(255),
 })
 
-export const userResolver = {
+export default {
+  // todo: remove query
   Query: {
     allUsers: (_parent: any, _args: any, context: Context) => {
       return context.prisma.user.findMany()
@@ -34,8 +35,6 @@ export const userResolver = {
         )
       }
 
-      const hashedPassword = await argon2.hash(password)
-
       const found = await context.prisma.user.findFirst({
         where: { email },
       })
@@ -46,6 +45,8 @@ export const userResolver = {
         )
       }
 
+      const hashedPassword = await argon2.hash(password)
+
       const user = await context.prisma.user.create({
         data: {
           name,
@@ -54,7 +55,7 @@ export const userResolver = {
         },
       })
 
-      return user
+      return !!user
     },
   },
 }

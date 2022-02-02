@@ -1,0 +1,7 @@
+type User {
+  id: Int!
+  email: String
+  name: String
+  confirmed: Boolean
+  password: String
+}
