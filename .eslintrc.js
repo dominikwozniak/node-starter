@@ -19,6 +19,7 @@ module.exports = {
   },
   plugins: ['@typescript-eslint', 'prettier', 'import'],
   rules: {
+    semi: 'off',
     'prettier/prettier': 'error',
     'import/extensions': 'off',
     'import/no-unresolved': 'error',
@@ -49,4 +50,4 @@ module.exports = {
       },
     },
   },
-};
+}

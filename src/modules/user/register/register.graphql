@@ -1,0 +1,13 @@
+type Query {
+  allUsers: [User!]!
+}
+
+type Mutation {
+  registerUser(data: RegisterUserInput): Boolean!
+}
+
+input RegisterUserInput {
+  email: String!
+  name: String!
+  password: String!
+}
