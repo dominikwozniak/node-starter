@@ -12,12 +12,6 @@ const registerUserSchema = yup.object().shape({
 })
 
 export default {
-  // todo: remove query
-  Query: {
-    allUsers: (_parent: unknown, _args: unknown, context: Context) => {
-      return context.prisma.user.findMany()
-    },
-  },
   Mutation: {
     registerUser: async (
       _parent: unknown,
