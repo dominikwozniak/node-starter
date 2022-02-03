@@ -7,12 +7,14 @@ import {
   ApolloServerPluginLandingPageGraphQLPlayground,
   ApolloServerPluginLandingPageProductionDefault,
 } from 'apollo-server-core'
+import connectRedis from "connect-redis"
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import session from 'express-session'
 import { schema } from '@src/utils/generateSchema'
 import { context } from '@src/context'
 import { sessionCookieId } from '@src/constants/session.const'
+import { redis } from '@src/utils/redis';
 
 dotenv.config()
 
@@ -20,10 +22,15 @@ async function bootstrap() {
   const app = express()
   const httpServer = http.createServer(app)
 
+  const RedisStore = connectRedis(session);
+
   app.use(cookieParser())
   app.use(cors())
   app.use(
     session({
+      store: new RedisStore({
+        client: redis as any
+      }),
       name: sessionCookieId,
       secret: process.env.SESSION_SECRET || '',
       resave: false,
