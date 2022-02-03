@@ -4,6 +4,7 @@ import { UserInputError } from 'apollo-server'
 import { Context } from '@src/context'
 import { RegisterUserInput } from '@src/modules/user/register/register-user.input'
 import { formatYupError } from '@src/utils/formatYupError'
+import { confirmUserMail } from '@src/utils/mail/confirm-user-mail'
 
 const registerUserSchema = yup.object().shape({
   email: yup.string().min(3).max(255).email(),
@@ -48,6 +49,9 @@ export default {
           password: hashedPassword,
         },
       })
+
+      const confirmToken = await confirmUserMail(user.email)
+      await context.redis.set(confirmToken, email, 'ex', 60 * 60 * 24)
 
       return !!user
     },

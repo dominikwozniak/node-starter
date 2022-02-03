@@ -1,0 +1,7 @@
+type Mutation {
+  confirmUser(data: ConfirmUserInput): Boolean!
+}
+
+input ConfirmUserInput {
+  token: String!
+}

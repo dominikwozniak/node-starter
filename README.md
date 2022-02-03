@@ -11,7 +11,6 @@ prisma migrate dev --name init
 npm run dev
 ```
 
-
 ### Linting
 
 To keep the code consistent, use the built-in prettier and eslint.
