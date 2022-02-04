@@ -1,9 +1,10 @@
 import { Context } from '@src/context'
 import { sessionCookieId } from '@src/constants/session.const'
+import { ResolverMap } from '@src/utils/graphql-types'
 
-export default {
+const resolvers: ResolverMap = {
   Mutation: {
-    logoutUser: async (_parent: unknown, _args: unknown, context: Context) => {
+    logoutUser: async (_parent, _args, context: Context) => {
       return new Promise((res, rej) =>
         // @ts-ignore
         context.req.session!.destroy((err) => {
@@ -20,3 +21,5 @@ export default {
     },
   },
 }
+
+export default resolvers

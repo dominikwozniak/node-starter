@@ -5,6 +5,7 @@ import { Context } from '@src/context'
 import { RegisterUserInput } from '@src/modules/user/register/register-user.input'
 import { formatYupError } from '@src/utils/formatYupError'
 import { confirmUserMail } from '@src/utils/mail/confirm-user-mail'
+import { ResolverMap } from '@src/utils/graphql-types'
 
 const registerUserSchema = yup.object().shape({
   email: yup.string().min(3).max(255).email(),
@@ -12,10 +13,10 @@ const registerUserSchema = yup.object().shape({
   password: yup.string().min(3).max(255),
 })
 
-export default {
+const resolvers: ResolverMap = {
   Mutation: {
     registerUser: async (
-      _parent: unknown,
+      _parent,
       args: { data: RegisterUserInput },
       context: Context
     ) => {
@@ -57,3 +58,5 @@ export default {
     },
   },
 }
+
+export default resolvers

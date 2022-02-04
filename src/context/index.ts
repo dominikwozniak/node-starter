@@ -1,13 +1,13 @@
 import { PrismaClient } from '@prisma/client'
 import { Redis } from 'ioredis'
 import { sessionUserId } from '@src/constants/session.const'
-import { redis } from '@src/utils/redis';
+import { redis } from '@src/utils/redis'
 
 const prisma = new PrismaClient()
 
 export interface Context {
   prisma: PrismaClient
-  redis: Redis,
+  redis: Redis
   req: Request
   res: Response
   userId: string | null

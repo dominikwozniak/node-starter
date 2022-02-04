@@ -5,16 +5,17 @@ import { Context } from '@src/context'
 import { formatYupError } from '@src/utils/formatYupError'
 import { LoginUserInput } from '@src/modules/user/login/login-user.input'
 import { sessionUserId } from '@src/constants/session.const'
+import { ResolverMap } from '@src/utils/graphql-types'
 
 const loginUserSchema = yup.object().shape({
   email: yup.string().min(3).max(255).email(),
   password: yup.string().min(3).max(255),
 })
 
-export default {
+const resolvers: ResolverMap = {
   Mutation: {
     loginUser: async (
-      _parent: unknown,
+      _parent,
       args: { data: LoginUserInput },
       context: Context
     ) => {
@@ -50,3 +51,5 @@ export default {
     },
   },
 }
+
+export default resolvers

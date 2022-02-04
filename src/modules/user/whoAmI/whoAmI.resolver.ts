@@ -1,9 +1,10 @@
 import { Context } from '@src/context'
 import { ApolloError } from 'apollo-server-core'
+import { ResolverMap } from '@src/utils/graphql-types'
 
-export default {
+const resolvers: ResolverMap = {
   Query: {
-    whoAmI: async (_parent: unknown, _args: unknown, context: Context) => {
+    whoAmI: async (_parent, _args, context: Context) => {
       if (!context.userId) {
         throw new ApolloError('Invalid user')
       }
@@ -21,3 +22,5 @@ export default {
     },
   },
 }
+
+export default resolvers
