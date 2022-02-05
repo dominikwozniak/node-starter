@@ -2,11 +2,9 @@ import * as yup from 'yup'
 import { UserInputError } from 'apollo-server'
 import { Context } from '@src/context'
 import { formatYupError } from '@src/utils/formatYupError'
-import { generateConfirmToken } from '@src/utils/generate/generate-confirm-token'
 import { ResolverMap } from '@src/utils/graphql-types'
-import { ForgotPasswordInput } from '@src/modules/user/forgotPassword/forgot-password.input';
-import { confirmUserMail } from '@src/utils/mail/confirm-user-mail';
-import { forgotPasswordMail } from '@src/utils/mail/forgot-password-mail';
+import { ForgotPasswordInput } from '@src/modules/user/forgotPassword/forgot-password.input'
+import { forgotPasswordMail } from '@src/utils/mail/forgot-password-mail'
 
 const forgotPasswordSchema = yup.object().shape({
   email: yup.string().min(3).max(255).email(),

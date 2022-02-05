@@ -1,7 +1,7 @@
 import * as yup from 'yup'
 import argon2 from 'argon2'
 import { UserInputError } from 'apollo-server'
-import { ApolloError } from 'apollo-server-core';
+import { ApolloError } from 'apollo-server-core'
 import { Context } from '@src/context'
 import { formatYupError } from '@src/utils/formatYupError'
 import { LoginUserInput } from '@src/modules/user/login/login-user.input'
@@ -46,7 +46,7 @@ const resolvers: ResolverMap = {
       }
 
       if (!user.confirmed) {
-        throw new ApolloError('User is not active');
+        throw new ApolloError('User is not active')
       }
 
       // @ts-ignore
