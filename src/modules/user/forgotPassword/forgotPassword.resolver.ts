@@ -1,7 +1,7 @@
 import * as yup from 'yup'
 import { UserInputError } from 'apollo-server'
 import { Context } from '@src/context'
-import { formatYupError } from '@src/utils/formatYupError'
+import { formatYupError } from '@src/utils/format-yup-error'
 import { ResolverMap } from '@src/utils/graphql-types'
 import { ForgotPasswordInput } from '@src/modules/user/forgotPassword/forgot-password.input'
 import { forgotPasswordMail } from '@src/utils/mail/forgot-password-mail'

@@ -2,14 +2,12 @@ import * as yup from 'yup'
 import argon2 from 'argon2'
 import { UserInputError } from 'apollo-server'
 import { Context } from '@src/context'
-import { formatYupError } from '@src/utils/formatYupError'
+import { formatYupError } from '@src/utils/format-yup-error'
 import { ResolverMap } from '@src/utils/graphql-types'
-import { generateForgotToken } from '@src/utils/generate/generate-forgot-token'
 import { ChangePasswordInput } from '@src/modules/user/changePassword/change-password.input'
-import { applyMiddleware } from '@src/middleware/applyMiddleware'
+import { applyMiddleware } from '@src/middleware/apply-middleware'
 import { authorization } from '@src/middleware/authorization.middleware'
-import { ApolloError } from 'apollo-server-core'
-import { getSessionUser } from '@src/utils/user/getSessionUser'
+import { getSessionUser } from '@src/utils/user/get-session-user'
 
 const changePasswordSchema = yup.object().shape({
   oldPassword: yup.string().min(3).max(255),

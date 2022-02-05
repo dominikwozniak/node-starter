@@ -3,7 +3,7 @@ import argon2 from 'argon2'
 import { UserInputError } from 'apollo-server'
 import { Context } from '@src/context'
 import { RegisterUserInput } from '@src/modules/user/register/register-user.input'
-import { formatYupError } from '@src/utils/formatYupError'
+import { formatYupError } from '@src/utils/format-yup-error'
 import { confirmUserMail } from '@src/utils/mail/confirm-user-mail'
 import { ResolverMap } from '@src/utils/graphql-types'
 

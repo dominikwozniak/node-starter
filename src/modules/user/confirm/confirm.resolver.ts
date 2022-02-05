@@ -1,7 +1,7 @@
 import * as yup from 'yup'
 import { UserInputError } from 'apollo-server'
 import { Context } from '@src/context'
-import { formatYupError } from '@src/utils/formatYupError'
+import { formatYupError } from '@src/utils/format-yup-error'
 import { ConfirmUserInput } from '@src/modules/user/confirm/confirm-user.input'
 import { generateConfirmToken } from '@src/utils/generate/generate-confirm-token'
 import { ResolverMap } from '@src/utils/graphql-types'
