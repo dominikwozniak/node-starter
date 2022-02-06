@@ -37,7 +37,11 @@ const resolvers: ResolverMap = {
         }
 
         const user = await getSessionUser(context)
-        const validatePassword = await argon2.verify(user.password, oldPassword)
+        // TODO: check if user have password
+        const validatePassword = await argon2.verify(
+          user.password!,
+          oldPassword
+        )
 
         if (!validatePassword) {
           return false
