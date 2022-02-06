@@ -15,6 +15,7 @@ model User {
   email     String?   @unique
   name      String?
   confirmed Boolean   @default(false)
+  oauth     Boolean   @default(false)
   password  String?
   githubId  String?   @unique
   createdAt DateTime  @default(now())

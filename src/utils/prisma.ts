@@ -15,6 +15,7 @@ export const githubUser = async (profile: any) => {
       githubId,
       name: displayName,
       confirmed: true,
+      oauth: true
     },
   })
 

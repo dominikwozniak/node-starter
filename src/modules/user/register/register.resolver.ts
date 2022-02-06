@@ -51,7 +51,6 @@ const resolvers: ResolverMap = {
         },
       })
 
-      // TODO: check if user have email
       const confirmToken = await confirmUserMail(user.email!)
       await context.redis.set(confirmToken, email, 'ex', 60 * 60 * 24)
 
