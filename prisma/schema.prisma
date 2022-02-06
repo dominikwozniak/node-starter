@@ -12,10 +12,12 @@ datasource db {
 
 model User {
   id        Int       @id @default(autoincrement())
-  email     String    @unique
-  name      String
+  email     String?   @unique
+  name      String?
   confirmed Boolean   @default(false)
-  password  String
+  oauth     Boolean   @default(false)
+  password  String?
+  githubId  String?   @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }

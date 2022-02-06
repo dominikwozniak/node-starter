@@ -2,8 +2,7 @@ import { PrismaClient } from '@prisma/client'
 import { Redis } from 'ioredis'
 import { sessionUserId } from '@src/constants/session.const'
 import { redis } from '@src/utils/redis'
-
-const prisma = new PrismaClient()
+import { prismaClient } from '@src/utils/prisma'
 
 export interface Context {
   prisma: PrismaClient
@@ -15,7 +14,7 @@ export interface Context {
 
 export const context = (ctx: Context) => {
   const context = ctx
-  ctx.prisma = prisma
+  ctx.prisma = prismaClient
   ctx.redis = redis
 
   // @ts-ignore

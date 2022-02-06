@@ -51,7 +51,7 @@ const resolvers: ResolverMap = {
         },
       })
 
-      const confirmToken = await confirmUserMail(user.email)
+      const confirmToken = await confirmUserMail(user.email!)
       await context.redis.set(confirmToken, email, 'ex', 60 * 60 * 24)
 
       return !!user

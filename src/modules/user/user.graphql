@@ -3,6 +3,8 @@ type User {
   email: String
   name: String
   confirmed: Boolean
+  oauth: Boolean
+  githubId: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }

@@ -37,7 +37,15 @@ const resolvers: ResolverMap = {
         }
 
         const user = await getSessionUser(context)
-        const validatePassword = await argon2.verify(user.password, oldPassword)
+
+        if (user.oauth) {
+          throw new UserInputError('Cannot change password for oauth user')
+        }
+
+        const validatePassword = await argon2.verify(
+          user.password!,
+          oldPassword
+        )
 
         if (!validatePassword) {
           return false

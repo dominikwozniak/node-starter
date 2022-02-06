@@ -39,7 +39,7 @@ const resolvers: ResolverMap = {
         throw new UserInputError('Invalid email or password')
       }
 
-      const validatePassword = await argon2.verify(user.password, password)
+      const validatePassword = await argon2.verify(user.password!, password)
 
       if (!validatePassword) {
         throw new UserInputError('Invalid email or password')
