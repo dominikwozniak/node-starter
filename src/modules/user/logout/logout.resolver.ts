@@ -1,6 +1,7 @@
 import { Context } from '@src/context'
 import { sessionCookieId } from '@src/constants/session.const'
 import { ResolverMap } from '@src/utils/graphql-types'
+import log from '@src/utils/logger';
 
 const resolvers: ResolverMap = {
   Mutation: {
@@ -9,7 +10,7 @@ const resolvers: ResolverMap = {
         // @ts-ignore
         context.req.session!.destroy((err) => {
           if (err) {
-            console.error(err)
+            log.error(err)
             return rej(false)
           }
 

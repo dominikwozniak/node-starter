@@ -18,6 +18,7 @@ import { context } from '@src/context'
 import { sessionCookieId } from '@src/constants/session.const'
 import { redis } from '@src/utils/redis'
 import { githubUser } from '@src/utils/prisma'
+import log from '@src/utils/logger';
 
 dotenv.config()
 
@@ -86,10 +87,10 @@ async function bootstrap() {
   server.applyMiddleware({ app })
 
   app.listen({ port: 4000 }, () => {
-    console.log('App is listening on http://localhost:4000/graphql')
+    log.info('App is listening on http://localhost:4000/graphql')
   })
 }
 
 bootstrap().catch((err) => {
-  console.error(err)
+  log.error(err)
 })

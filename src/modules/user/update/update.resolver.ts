@@ -5,7 +5,8 @@ import { formatYupError } from '@src/utils/format-yup-error'
 import { ResolverMap } from '@src/utils/graphql-types'
 import { applyMiddleware } from '@src/middleware/apply-middleware'
 import { authorization } from '@src/middleware/authorization.middleware'
-import { UpdateUserInput } from '@src/modules/user/update/update-user.input';
+import { UpdateUserInput } from '@src/modules/user/update/update-user.input'
+import log from '@src/utils/logger';
 
 const updateUser = yup.object().shape({
   email: yup.string().email(),
@@ -16,12 +17,7 @@ const resolvers: ResolverMap = {
   Mutation: {
     updateUser: applyMiddleware(
       authorization,
-      async (
-        _parent,
-        args: { data: UpdateUserInput },
-        context: Context
-      ) => {
-
+      async (_parent, args: { data: UpdateUserInput }, context: Context) => {
         try {
           await updateUser.validate(args.data, {
             abortEarly: false,
@@ -37,14 +33,14 @@ const resolvers: ResolverMap = {
           await context.prisma.user.update({
             where: {
               // @ts-ignore
-              id: context.userId
+              id: context.userId,
             },
             data: {
-              ...args.data
-            }
+              ...args.data,
+            },
           })
         } catch (error) {
-          console.error(error)
+          log.error(error)
           return false
         }
 

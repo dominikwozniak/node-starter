@@ -1,4 +1,5 @@
 import * as nodemailer from 'nodemailer'
+import log from '@src/utils/logger';
 
 export const createForgotPasswordUrl = (token: string) => {
   return `http://localhost:3000/forgot-password/${token}`
@@ -13,7 +14,7 @@ export async function sendEmail(
   url: string,
   subject = 'Test mail'
 ) {
-  console.log(`Send email to ${email} and url ${url}`)
+  log.info(`Send email to ${email} and url ${url}`)
 
   const testAccount = await nodemailer.createTestAccount()
 
@@ -34,6 +35,6 @@ export async function sendEmail(
     text: url,
   })
 
-  console.log(`Message sent: ${info.messageId}`)
-  console.log(`Preview URL: ${nodemailer.getTestMessageUrl(info)}`)
+  log.info(`Message sent: ${info.messageId}`)
+  log.info(`Preview URL: ${nodemailer.getTestMessageUrl(info)}`)
 }
