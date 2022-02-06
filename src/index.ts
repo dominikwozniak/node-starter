@@ -2,6 +2,8 @@ import dotenv from 'dotenv-safe'
 import express from 'express'
 import { ApolloServer } from 'apollo-server-express'
 import * as http from 'http'
+import passport from 'passport'
+import { Strategy as GitHubStrategy } from 'passport-github2'
 import {
   ApolloServerPluginDrainHttpServer,
   ApolloServerPluginLandingPageGraphQLPlayground,
@@ -15,13 +17,13 @@ import { schema } from '@src/utils/generate/generate-schema'
 import { context } from '@src/context'
 import { sessionCookieId } from '@src/constants/session.const'
 import { redis } from '@src/utils/redis'
+import { githubUser } from '@src/utils/prisma'
 
 dotenv.config()
 
 async function bootstrap() {
   const app = express()
   const httpServer = http.createServer(app)
-
   const RedisStore = connectRedis(session)
 
   app.use(cookieParser())
@@ -41,6 +43,32 @@ async function bootstrap() {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
       },
     })
+  )
+
+  passport.use(
+    new GitHubStrategy(
+      {
+        clientID: process.env.GITHUB_OAUTH_CLIENT_ID!,
+        clientSecret: process.env.GITHUB_OAUTH_SECRET!,
+        callbackURL: 'http://localhost:4000/auth/github/callback',
+      },
+      async (_: any, __: any, profile: any, cb: any) => {
+        const userId = await githubUser(profile)
+        return cb(null, { id: userId })
+      }
+    )
+  )
+
+  app.use(passport.initialize())
+  app.get('/auth/github', passport.authenticate('github', { session: false }))
+  app.get(
+    '/auth/github/callback',
+    passport.authenticate('github', { session: false }),
+    async (req, res) => {
+      ;(req.session as any).userId = (req.user as any).id
+      // TODO: frontend redirect
+      res.redirect('/graphql')
+    }
   )
 
   const server = new ApolloServer({
