@@ -6,7 +6,7 @@ import { ResolverMap } from '@src/utils/graphql-types'
 import { applyMiddleware } from '@src/middleware/apply-middleware'
 import { authorization } from '@src/middleware/authorization.middleware'
 import { UpdateUserInput } from '@src/modules/user/update/update-user.input'
-import log from '@src/utils/logger';
+import log from '@src/utils/logger'
 
 const updateUser = yup.object().shape({
   email: yup.string().email(),

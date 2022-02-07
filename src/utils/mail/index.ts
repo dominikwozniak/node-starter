@@ -1,5 +1,5 @@
 import * as nodemailer from 'nodemailer'
-import log from '@src/utils/logger';
+import log from '@src/utils/logger'
 
 export const createForgotPasswordUrl = (token: string) => {
   return `http://localhost:3000/forgot-password/${token}`

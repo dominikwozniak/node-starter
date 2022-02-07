@@ -1,7 +1,7 @@
 import { Context } from '@src/context'
 import { sessionCookieId } from '@src/constants/session.const'
 import { ResolverMap } from '@src/utils/graphql-types'
-import log from '@src/utils/logger';
+import log from '@src/utils/logger'
 
 const resolvers: ResolverMap = {
   Mutation: {
