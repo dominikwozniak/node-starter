@@ -1,8 +1,8 @@
-import { Client } from 'pg'
-import { nanoid } from 'nanoid'
-import NodeEnvironment from 'jest-environment-node'
-import util from 'util'
-import childProcess from 'child_process'
+const { Client } = require('pg')
+const { nanoid } = require('nanoid')
+const NodeEnvironment = require('jest-environment-node')
+const util = require('util')
+const childProcess = require('child_process')
 
 const exec = util.promisify(childProcess.exec)
 
