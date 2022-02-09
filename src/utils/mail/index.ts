@@ -14,8 +14,6 @@ export async function sendEmail(
   url: string,
   subject = 'Test mail'
 ) {
-  log.info(`Send email to ${email} and url ${url}`)
-
   const testAccount = await nodemailer.createTestAccount()
 
   const transporter = nodemailer.createTransport({
@@ -35,6 +33,9 @@ export async function sendEmail(
     text: url,
   })
 
-  log.info(`Message sent: ${info.messageId}`)
-  log.info(`Preview URL: ${nodemailer.getTestMessageUrl(info)}`)
+  if (process.env.NODE_ENV === 'development') {
+    log.info(`Send email to ${email} and url ${url}`)
+    log.info(`Message sent: ${info.messageId}`)
+    log.info(`Preview URL: ${nodemailer.getTestMessageUrl(info)}`)
+  }
 }

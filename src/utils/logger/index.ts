@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 
 const log = logger({
   transport: {
-    target: 'pino-pretty'
+    target: 'pino-pretty',
   },
   base: {
     pid: false,
