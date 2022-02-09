@@ -1,11 +1,19 @@
+import Redis from 'ioredis'
 import { createTestClient } from 'apollo-server-testing'
 import { PrismaClient } from '@prisma/client'
 import { constructTestServer } from '@src/__tests__/utils/server'
 import { registerMutation } from '@src/__tests__/utils/mutations'
-import Redis from 'ioredis'
 
 const client = new PrismaClient()
 const redis = new Redis()
+
+const userName = 'test'
+const userEmail = 'test@mail.com'
+const userPassword = 'Test123'
+const wrongName = 'te'
+const wrongEmail = 'wrong'
+const wrongPassword = 'te'
+
 
 afterAll(async () => {
   await client.$disconnect()
@@ -21,9 +29,9 @@ describe('Register user', () => {
       mutation: registerMutation,
       variables: {
         data: {
-          email: 'test@mail.com',
-          name: 'Test',
-          password: 'Test@123',
+          email: userEmail,
+          name: userName,
+          password: userPassword,
         },
       },
     })
@@ -39,9 +47,9 @@ describe('Register user', () => {
       mutation: registerMutation,
       variables: {
         data: {
-          email: 'test',
-          name: 'Test',
-          password: 'Test@123',
+          email: wrongEmail,
+          name: userName,
+          password: userPassword,
         },
       },
     })
@@ -70,9 +78,9 @@ describe('Register user', () => {
       mutation: registerMutation,
       variables: {
         data: {
-          email: 'test@mail.com',
-          name: 'Te',
-          password: 'Test@123',
+          email: userEmail,
+          name: wrongName,
+          password: userPassword,
         },
       },
     })
@@ -101,9 +109,9 @@ describe('Register user', () => {
       mutation: registerMutation,
       variables: {
         data: {
-          email: 'test@mail.com',
-          name: 'Test',
-          password: 'Te',
+          email: userEmail,
+          name: userName,
+          password: wrongPassword,
         },
       },
     })

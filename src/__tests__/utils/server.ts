@@ -15,8 +15,8 @@ export const constructTestServer = (ctx: any) => {
     context: ({ res }) => {
       const req = {
         session: {
-          sessionUserId: 1
-        }
+          sessionUserId: 1,
+        },
       }
 
       return { req, res, ...ctx }
