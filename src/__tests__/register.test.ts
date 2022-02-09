@@ -7,8 +7,6 @@ import Redis from 'ioredis'
 const client = new PrismaClient()
 const redis = new Redis()
 
-beforeEach(async () => {})
-
 afterAll(async () => {
   await client.$disconnect()
   await redis.quit()
