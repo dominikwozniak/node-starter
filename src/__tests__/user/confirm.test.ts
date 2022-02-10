@@ -3,8 +3,8 @@ import argon2 from 'argon2'
 import { createTestClient } from 'apollo-server-testing'
 import { PrismaClient } from '@prisma/client'
 import { constructTestServer } from '@src/__tests__/utils/server'
-import { confirmUser, loginMutation } from '@src/__tests__/utils/mutations';
-import { generateConfirmToken } from '@src/utils/generate/generate-confirm-token';
+import { confirmUser } from '@src/__tests__/utils/mutations'
+import { generateConfirmToken } from '@src/utils/generate/generate-confirm-token'
 
 const client = new PrismaClient()
 const redis = new Redis()
@@ -47,7 +47,7 @@ describe('Confirm user', () => {
       mutation: confirmUser,
       variables: {
         data: {
-          token
+          token,
         },
       },
     })
@@ -63,7 +63,7 @@ describe('Confirm user', () => {
       mutation: confirmUser,
       variables: {
         data: {
-          token: wrongToken
+          token: wrongToken,
         },
       },
     })

@@ -2,7 +2,6 @@ import { ApolloServer } from 'apollo-server-express'
 import { makeExecutableSchema } from '@graphql-tools/schema'
 import { typeDefs } from '@src/utils/generate/generate-typedefs'
 import { resolvers } from '@src/utils/generate/generate-resolvers'
-import { sessionUserId } from '@src/constants/session.const'
 
 const schema = makeExecutableSchema({
   typeDefs,
@@ -15,7 +14,7 @@ export const constructTestServer = (ctx: any) => {
     context: ({ res }) => {
       const req = {
         session: {
-          sessionUserId: 1,
+          sessionUserId: ctx.userId || 1
         },
       }
 
