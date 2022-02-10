@@ -33,3 +33,9 @@ export const confirmUser = gql`
     confirmUser(data: $data)
   }
 `
+
+export const updateUser = gql`
+  mutation updateUser($data: UpdateUserInput) {
+    updateUser(data: $data)
+  }
+`

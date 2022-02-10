@@ -14,7 +14,7 @@ export const constructTestServer = (ctx: any) => {
     context: ({ res }) => {
       const req = {
         session: {
-          sessionUserId: ctx.userId || 1
+          sessionUserId: ctx.userId || 1,
         },
       }
 

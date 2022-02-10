@@ -4,7 +4,7 @@ import { createTestClient } from 'apollo-server-testing'
 import { PrismaClient } from '@prisma/client'
 import { constructTestServer } from '@src/__tests__/utils/server'
 import { loginMutation } from '@src/__tests__/utils/mutations'
-import { whoAmI } from '@src/__tests__/utils/queries';
+import { whoAmI } from '@src/__tests__/utils/queries'
 
 const client = new PrismaClient()
 const redis = new Redis()
@@ -68,9 +68,12 @@ describe('Who Am I', () => {
     expect(res.errors![0].message).toBe('Invalid user')
   })
 
-
   test('Check blank user id', async () => {
-    const { server } = constructTestServer({ prisma: client, userId: undefined, redis })
+    const { server } = constructTestServer({
+      prisma: client,
+      userId: undefined,
+      redis,
+    })
     // @ts-ignore
     const { mutate } = createTestClient(server)
     const res = await mutate({
