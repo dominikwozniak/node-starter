@@ -3,7 +3,7 @@ import argon2 from 'argon2'
 import { createTestClient } from 'apollo-server-testing'
 import { PrismaClient } from '@prisma/client'
 import { constructTestServer } from '@src/__tests__/utils/server'
-import { confirmUser } from '@src/__tests__/utils/mutations'
+import { confirmUserMutation } from '@src/__tests__/utils/mutations'
 import { generateConfirmToken } from '@src/utils/generate/generate-confirm-token'
 
 const client = new PrismaClient()
@@ -44,7 +44,7 @@ describe('Confirm user', () => {
     // @ts-ignore
     const { mutate } = createTestClient(server)
     const res = await mutate({
-      mutation: confirmUser,
+      mutation: confirmUserMutation,
       variables: {
         data: {
           token,
@@ -60,7 +60,7 @@ describe('Confirm user', () => {
     // @ts-ignore
     const { mutate } = createTestClient(server)
     const res = await mutate({
-      mutation: confirmUser,
+      mutation: confirmUserMutation,
       variables: {
         data: {
           token: wrongToken,

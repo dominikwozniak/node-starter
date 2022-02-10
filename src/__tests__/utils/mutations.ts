@@ -28,14 +28,20 @@ export const forgotPasswordConfirmMutation = gql`
   }
 `
 
-export const confirmUser = gql`
+export const confirmUserMutation = gql`
   mutation confirmUser($data: ConfirmUserInput) {
     confirmUser(data: $data)
   }
 `
 
-export const updateUser = gql`
+export const updateUserMutation = gql`
   mutation updateUser($data: UpdateUserInput) {
     updateUser(data: $data)
+  }
+`
+
+export const changePasswordMutation = gql`
+  mutation changePassword($data: ChangePasswordInput) {
+    changePassword(data: $data)
   }
 `
