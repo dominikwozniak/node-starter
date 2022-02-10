@@ -31,7 +31,7 @@ const resolvers: ResolverMap = {
         )
       }
 
-      const found = await context.prisma.user.findFirst({
+      const found = await context.prisma.user.findUnique({
         where: { email },
       })
 

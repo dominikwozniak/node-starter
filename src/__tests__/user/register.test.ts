@@ -14,7 +14,6 @@ const wrongName = 'te'
 const wrongEmail = 'wrong'
 const wrongPassword = 'te'
 
-
 afterAll(async () => {
   await client.$disconnect()
   await redis.quit()
