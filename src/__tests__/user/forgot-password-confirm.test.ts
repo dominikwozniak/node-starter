@@ -3,8 +3,8 @@ import argon2 from 'argon2'
 import { createTestClient } from 'apollo-server-testing'
 import { PrismaClient } from '@prisma/client'
 import { constructTestServer } from '@src/__tests__/utils/server'
-import { forgotPasswordConfirmMutation } from '@src/__tests__/utils/mutations';
-import { generateForgotToken } from '@src/utils/generate/generate-forgot-token';
+import { forgotPasswordConfirmMutation } from '@src/__tests__/utils/mutations'
+import { generateForgotToken } from '@src/utils/generate/generate-forgot-token'
 
 const client = new PrismaClient()
 const redis = new Redis()
@@ -50,7 +50,7 @@ describe('Forgot password', () => {
       variables: {
         data: {
           password: newPassword,
-          token
+          token,
         },
       },
     })
@@ -68,7 +68,7 @@ describe('Forgot password', () => {
       variables: {
         data: {
           password: newPassword,
-          token: wrongToken
+          token: wrongToken,
         },
       },
     })
@@ -86,7 +86,7 @@ describe('Forgot password', () => {
       variables: {
         data: {
           password: invalidPassword,
-          token
+          token,
         },
       },
     })
