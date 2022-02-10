@@ -10,7 +10,7 @@ import log from '@src/utils/logger'
 
 const updateUser = yup.object().shape({
   email: yup.string().email(),
-  name: yup.string(),
+  name: yup.string().min(3).max(255),
 })
 
 const resolvers: ResolverMap = {

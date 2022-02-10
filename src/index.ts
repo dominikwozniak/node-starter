@@ -18,7 +18,7 @@ import { context } from '@src/context'
 import { sessionCookieId } from '@src/constants/session.const'
 import { redis } from '@src/utils/redis'
 import log from '@src/utils/logger'
-import { githubStrategy } from '@src/utils/passport/github-strategy';
+import { githubStrategy } from '@src/utils/passport/github-strategy'
 
 dotenv.config()
 
