@@ -3,7 +3,10 @@ import argon2 from 'argon2'
 import { createTestClient } from 'apollo-server-testing'
 import { PrismaClient } from '@prisma/client'
 import { constructTestServer } from '@src/__tests__/utils/server'
-import { loginMutation, updateUserMutation } from '@src/__tests__/utils/mutations'
+import {
+  loginMutation,
+  updateUserMutation,
+} from '@src/__tests__/utils/mutations'
 
 const client = new PrismaClient()
 const redis = new Redis()
