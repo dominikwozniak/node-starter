@@ -11,13 +11,50 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String?   @unique
-  name      String?
-  confirmed Boolean   @default(false)
-  oauth     Boolean   @default(false)
-  password  String?
-  githubId  String?   @unique
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id              Int       @id @default(autoincrement())
+  email           String?   @unique
+  name            String?
+  password        String?
+
+  confirmed       Boolean   @default(false)
+  oauth           Boolean   @default(false)
+  githubId        String?   @unique
+
+  conversations   UsersInConversations[]
+  Message         Message[]
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Message {
+  id              Int           @id @default(autoincrement())
+  text            String
+  read            Boolean       @default(false)
+
+  userId          Int
+  author          User          @relation(fields: [userId], references: [id])
+  conversationId  Int
+  conversation    Conversation  @relation(fields: [conversationId], references: [id])
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Conversation {
+  id              Int       @id @default(autoincrement())
+  participants    UsersInConversations[]
+  messages        Message[]
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model UsersInConversations {
+  conversationId  Int
+  conversation    Conversation @relation(fields: [conversationId], references: [id])
+  userId          Int
+  user            User         @relation(fields: [userId], references: [id])
+
+  @@id([userId, conversationId])
 }
