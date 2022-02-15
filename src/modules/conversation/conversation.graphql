@@ -1,7 +1,13 @@
 type Conversation {
   id: Int!
-#  participants: UsersInConversations[]
-#  messages: Message[]
+  participants: [ConversationUser]
+  #  messages: Message[]
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+# TODO: replace to separate file / module
+type ConversationUser {
+  userId: Int
+  conversationId: Int
 }

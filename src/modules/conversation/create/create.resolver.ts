@@ -8,13 +8,21 @@ const resolvers: ResolverMap = {
   Mutation: {
     createConversation: applyMiddleware(
       authorization,
-      async (
-        _parent,
-        _args,
-        context: Context
-      ) => {
+      async (_parent, _args, context: Context) => {
+        if (!context.userId) {
+          throw new ApolloError('Authorization failed')
+        }
+
         const conversation = await context.prisma.conversation.create({
-          data: {},
+          data: {
+            participants: {
+              create: {
+                user: {
+                  connect: { id: parseInt(context.userId) },
+                },
+              },
+            },
+          },
           include: {
             participants: true,
           },
@@ -26,7 +34,7 @@ const resolvers: ResolverMap = {
 
         return conversation
       }
-    )
+    ),
   },
 }
 

@@ -5,12 +5,9 @@ import { getSessionUser } from '@src/utils/user/get-session-user'
 
 const resolvers: ResolverMap = {
   Query: {
-    whoAmI: applyMiddleware(
-      authorization,
-      async (_parent, _args, context) => {
-        return getSessionUser(context)
-      }
-    ),
+    whoAmI: applyMiddleware(authorization, async (_parent, _args, context) => {
+      return getSessionUser(context)
+    }),
   },
 }
 
