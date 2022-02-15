@@ -20,7 +20,7 @@ model User {
   oauth           Boolean   @default(false)
   githubId        String?   @unique
 
-  conversations   UsersInConversations[]
+  conversations   ConversationUser[]
   Message         Message[]
 
   createdAt       DateTime  @default(now())
@@ -43,14 +43,14 @@ model Message {
 
 model Conversation {
   id              Int       @id @default(autoincrement())
-  participants    UsersInConversations[]
+  participants    ConversationUser[]
   messages        Message[]
 
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 }
 
-model UsersInConversations {
+model ConversationUser {
   conversationId  Int
   conversation    Conversation @relation(fields: [conversationId], references: [id])
   userId          Int
