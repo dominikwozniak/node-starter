@@ -1,0 +1,7 @@
+type Conversation {
+  id: Int!
+#  participants: UsersInConversations[]
+#  messages: Message[]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
