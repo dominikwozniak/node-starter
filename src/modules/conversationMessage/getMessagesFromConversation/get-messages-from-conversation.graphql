@@ -1,0 +1,7 @@
+type Mutation {
+  getMessagesFromConversation(data: GetMessagesFromConversationInput): [ConversationMessage]
+}
+
+input GetMessagesFromConversationInput {
+  conversationId: Int!
+}

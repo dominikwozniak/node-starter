@@ -43,8 +43,8 @@ const resolvers: ResolverMap = {
             },
             conversation: {
               connect: {
-                id: conversationId
-              }
+                id: conversationId,
+              },
             },
           },
         })
