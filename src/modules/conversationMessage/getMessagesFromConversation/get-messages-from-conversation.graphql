@@ -1,5 +1,7 @@
-type Mutation {
-  getMessagesFromConversation(data: GetMessagesFromConversationInput): [ConversationMessage]
+type Query {
+  getMessagesFromConversation(
+    data: GetMessagesFromConversationInput
+  ): [ConversationMessage]
 }
 
 input GetMessagesFromConversationInput {
