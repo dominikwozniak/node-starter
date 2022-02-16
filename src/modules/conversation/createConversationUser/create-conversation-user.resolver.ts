@@ -50,6 +50,7 @@ const resolvers: ResolverMap = {
           throw new ApolloError('User already in conversation')
         }
 
+        // TODO: try-catch
         const conversationUser = await context.prisma.conversationUser.create({
           data: {
             user: {

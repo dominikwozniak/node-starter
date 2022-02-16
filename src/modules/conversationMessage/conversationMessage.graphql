@@ -1,0 +1,6 @@
+type ConversationMessage {
+  id: Int!
+  text: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}

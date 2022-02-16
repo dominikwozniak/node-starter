@@ -13,6 +13,7 @@ const resolvers: ResolverMap = {
           throw new ApolloError('Authorization failed')
         }
 
+        // TODO: try-catch
         const conversation = await context.prisma.conversation.create({
           data: {
             participants: {
