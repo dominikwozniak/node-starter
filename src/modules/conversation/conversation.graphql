@@ -1,7 +1,7 @@
 type Conversation {
   id: Int!
   participants: [ConversationUser]
-  #  messages: Message[]
+  messages: [ConversationMessage]
   createdAt: DateTime!
   updatedAt: DateTime!
 }

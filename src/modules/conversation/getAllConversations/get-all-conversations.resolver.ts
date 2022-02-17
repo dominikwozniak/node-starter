@@ -5,36 +5,39 @@ import { authorization } from '@src/middleware/authorization.middleware'
 import { applyMiddleware } from '@src/middleware/apply-middleware'
 
 const resolvers: ResolverMap = {
-  Mutation: {
-    createConversation: applyMiddleware(
+  Query: {
+    getAllConversations: applyMiddleware(
       authorization,
-      async (_parent, _args, context: Context) => {
+      async (
+        _parent,
+        _args,
+        context: Context
+      ) => {
         if (!context.userId) {
           throw new ApolloError('Authorization failed')
         }
 
         // TODO: try-catch
-        const conversation = await context.prisma.conversation.create({
-          data: {
+        const conversations = await context.prisma.conversation.findMany({
+          where: {
             participants: {
-              create: {
-                user: {
-                  connect: { id: parseInt(context.userId) },
-                },
-              },
+              some: {
+                userId: parseInt(context.userId)
+              }
             },
           },
           include: {
             participants: true,
-            messages: true
+            messages: {
+              take: 1,
+              orderBy: {
+                createdAt: 'desc',
+              },
+            }
           },
         })
 
-        if (!conversation) {
-          throw new ApolloError('Cannot create conversation')
-        }
-
-        return conversation
+        return conversations
       }
     ),
   },

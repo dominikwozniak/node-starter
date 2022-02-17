@@ -37,6 +37,10 @@ const resolvers: ResolverMap = {
 
         // TODO: try-catch
         const messages = await context.prisma.conversationMessage.findMany({
+          take: 10,
+          orderBy: {
+            createdAt: 'desc'
+          },
           where: {
             conversationId,
           },
