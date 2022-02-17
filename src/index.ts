@@ -1,5 +1,5 @@
 import dotenv from 'dotenv-safe'
-import express from 'express';
+import express from 'express'
 import { ApolloServer } from 'apollo-server-express'
 import { execute, subscribe } from 'graphql'
 import { SubscriptionServer } from 'subscriptions-transport-ws'
@@ -17,7 +17,7 @@ import log from '@src/utils/logger'
 import { schema } from '@src/utils/generate/generate-schema'
 import { context } from '@src/context'
 import { githubStrategy } from '@src/utils/passport/github-strategy'
-import { sessionMiddleware } from '@src/utils/session';
+import { sessionMiddleware } from '@src/utils/session'
 
 dotenv.config()
 
@@ -49,8 +49,12 @@ async function bootstrap() {
       schema,
       execute,
       subscribe,
-      onConnect: async (_connectionParams: any, _webSocket: any, { request }: any) => {
-        const req = await new Promise(resolve => {
+      onConnect: async (
+        _connectionParams: any,
+        _webSocket: any,
+        { request }: any
+      ) => {
+        const req = await new Promise((resolve) => {
           // @ts-ignore
           sessionMiddleware(request as Request, {} as Response, () => {
             resolve(request)
@@ -58,7 +62,7 @@ async function bootstrap() {
         })
 
         return { req }
-      }
+      },
     },
     { server: httpServer, path: '/graphql' }
   )

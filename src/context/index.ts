@@ -1,11 +1,11 @@
 import { PrismaClient } from '@prisma/client'
 import { Redis } from 'ioredis'
 import { PubSub } from 'graphql-subscriptions'
+import { RedisPubSub } from 'graphql-redis-subscriptions'
 import { sessionUserId } from '@src/constants/session.const'
 import { redis } from '@src/utils/redis'
 import { prismaClient } from '@src/utils/prisma'
 import { pubsub } from '@src/utils/pubsub'
-import { RedisPubSub } from 'graphql-redis-subscriptions'
 
 export interface Context {
   prisma: PrismaClient
