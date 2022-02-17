@@ -17,6 +17,6 @@ export type GraphQLMiddlewareFunc = (
 
 export interface ResolverMap {
   [key: string]: {
-    [key: string]: Resolver
+    [key: string]: Resolver | { [key: string]: Resolver }
   }
 }
