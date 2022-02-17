@@ -1,18 +1,18 @@
 import dotenv from 'dotenv-safe'
 import express from 'express'
+import morgan from 'morgan'
+import passport from 'passport'
+import cookieParser from 'cookie-parser'
+import cors from 'cors'
+import * as http from 'http'
 import { ApolloServer } from 'apollo-server-express'
 import { execute, subscribe } from 'graphql'
 import { SubscriptionServer } from 'subscriptions-transport-ws'
-import * as http from 'http'
-import morgan from 'morgan'
-import passport from 'passport'
 import {
   ApolloServerPluginDrainHttpServer,
   ApolloServerPluginLandingPageGraphQLPlayground,
   ApolloServerPluginLandingPageProductionDefault,
 } from 'apollo-server-core'
-import cookieParser from 'cookie-parser'
-import cors from 'cors'
 import log from '@src/utils/logger'
 import { schema } from '@src/utils/generate/generate-schema'
 import { context } from '@src/context'
@@ -91,7 +91,7 @@ async function bootstrap() {
   server.applyMiddleware({ app })
 
   httpServer.listen(4000, () =>
-    console.log(`Server is now running on http://localhost:4000/graphql`)
+    log.info(`Server is now running on http://localhost:4000/graphql`)
   )
 }
 
