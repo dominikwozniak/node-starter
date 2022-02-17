@@ -8,11 +8,7 @@ const resolvers: ResolverMap = {
   Query: {
     getAllConversations: applyMiddleware(
       authorization,
-      async (
-        _parent,
-        _args,
-        context: Context
-      ) => {
+      async (_parent, _args, context: Context) => {
         if (!context.userId) {
           throw new ApolloError('Authorization failed')
         }
@@ -22,8 +18,8 @@ const resolvers: ResolverMap = {
           where: {
             participants: {
               some: {
-                userId: parseInt(context.userId)
-              }
+                userId: parseInt(context.userId),
+              },
             },
           },
           include: {
@@ -33,7 +29,7 @@ const resolvers: ResolverMap = {
               orderBy: {
                 createdAt: 'desc',
               },
-            }
+            },
           },
         })
 

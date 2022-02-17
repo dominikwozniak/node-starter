@@ -26,7 +26,7 @@ const resolvers: ResolverMap = {
           },
           include: {
             participants: true,
-            messages: true
+            messages: true,
           },
         })
 

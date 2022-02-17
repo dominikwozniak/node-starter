@@ -6,25 +6,29 @@ import { ResolverMap } from '@src/utils/graphql-types'
 import { authorization } from '@src/middleware/authorization.middleware'
 import { applyMiddleware } from '@src/middleware/apply-middleware'
 import { formatYupError } from '@src/utils/format-yup-error'
-import { GetMessagesFromConversationInput } from '@src/modules/conversationMessage/getMessagesFromConversation/get-messages-from-conversation.input'
+import {
+  GetMessagesPaginatedFromConversationInput
+} from '@src/modules/conversationMessage/getMessagesPaginatedFromConversation/get-messages-paginated-from-conversation.input';
 
-const getMessagesFromConversationSchema = yup.object().shape({
+const getMessagesPaginatedFromConversationSchema = yup.object().shape({
   conversationId: yup.number().min(0),
+  skip: yup.number().min(0),
+  take: yup.number().min(0),
 })
 
 const resolvers: ResolverMap = {
   Query: {
-    getMessagesFromConversation: applyMiddleware(
+    getMessagesPaginatedFromConversation: applyMiddleware(
       authorization,
       async (
         _parent,
-        args: { data: GetMessagesFromConversationInput },
+        args: { data: GetMessagesPaginatedFromConversationInput },
         context: Context
       ) => {
-        const { conversationId } = args.data
+        const { conversationId, skip, take } = args.data
 
         try {
-          await getMessagesFromConversationSchema.validate(args.data, {
+          await getMessagesPaginatedFromConversationSchema.validate(args.data, {
             abortEarly: false,
           })
         } catch (error) {
@@ -37,7 +41,8 @@ const resolvers: ResolverMap = {
 
         // TODO: try-catch
         const messages = await context.prisma.conversationMessage.findMany({
-          take: 10,
+          take,
+          skip,
           orderBy: {
             createdAt: 'desc',
           },
