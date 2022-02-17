@@ -3,6 +3,7 @@ type ConversationMessage {
   text: String
   read: Boolean
   author: User
+  conversation: Conversation
   createdAt: DateTime!
   updatedAt: DateTime!
 }

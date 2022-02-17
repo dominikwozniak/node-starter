@@ -68,7 +68,7 @@ async function bootstrap() {
     {
       schema,
       execute,
-      subscribe
+      subscribe,
     },
     { server: httpServer, path: '/graphql' }
   )

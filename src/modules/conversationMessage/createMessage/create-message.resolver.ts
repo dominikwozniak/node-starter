@@ -7,6 +7,7 @@ import { authorization } from '@src/middleware/authorization.middleware'
 import { applyMiddleware } from '@src/middleware/apply-middleware'
 import { formatYupError } from '@src/utils/format-yup-error'
 import { CreateMessageInput } from '@src/modules/conversationMessage/createMessage/create-message.input'
+import { PUBSUB_NEW_MESSAGE } from '@src/constants/pubsub.const'
 
 const createMessageSchema = yup.object().shape({
   conversationId: yup.number().min(0),
@@ -47,6 +48,14 @@ const resolvers: ResolverMap = {
               },
             },
           },
+          include: {
+            author: true,
+            conversation: true,
+          },
+        })
+
+        await context.pubsub.publish(PUBSUB_NEW_MESSAGE, {
+          newMessage: message,
         })
 
         return true
