@@ -1,15 +1,9 @@
 type Conversation {
   id: Int!
   name: String
-  private: Boolean
+  isPrivate: Boolean
   participants: [ConversationUser]
   messages: [ConversationMessage]
   createdAt: DateTime!
   updatedAt: DateTime!
-}
-
-# TODO: replace to separate file / module
-type ConversationUser {
-  userId: Int
-  conversationId: Int
 }
