@@ -3,7 +3,7 @@ import argon2 from 'argon2'
 import { createTestClient } from 'apollo-server-testing'
 import { PrismaClient } from '@prisma/client'
 import { constructTestServer } from '@src/__tests__/utils/server'
-import { createConversationMutation, updateConversationMutation } from '@src/__tests__/utils/mutations';
+import { updateConversationMutation } from '@src/__tests__/utils/mutations'
 
 const client = new PrismaClient()
 const redis = new Redis()
@@ -55,7 +55,7 @@ afterAll(async () => {
   await redis.quit()
 })
 
-describe('Create conversation', () => {
+describe('Update conversation', () => {
   test('Check updating', async () => {
     const { server } = constructTestServer({ prisma: client, userId: 1, redis })
     // @ts-ignore
@@ -73,8 +73,8 @@ describe('Create conversation', () => {
 
     const conversation = await client.conversation.findUnique({
       where: {
-        id: conversationId
-      }
+        id: conversationId,
+      },
     })
 
     expect(res.data.updateConversation).toBeTruthy()
@@ -99,8 +99,8 @@ describe('Create conversation', () => {
 
     const conversation = await client.conversation.findUnique({
       where: {
-        id: conversationId
-      }
+        id: conversationId,
+      },
     })
 
     expect(res.data.updateConversation).toBeTruthy()
@@ -118,15 +118,15 @@ describe('Create conversation', () => {
       variables: {
         data: {
           conversationId,
-          isPrivate
+          isPrivate,
         },
       },
     })
 
     const conversation = await client.conversation.findUnique({
       where: {
-        id: conversationId
-      }
+        id: conversationId,
+      },
     })
 
     expect(res.data.updateConversation).toBeTruthy()

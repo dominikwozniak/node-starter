@@ -39,12 +39,6 @@ const resolvers: ResolverMap = {
           throw new ApolloError('Authorization failed')
         }
 
-        await checkUserInConversation(
-          context,
-          conversationId,
-          'User already in conversation'
-        )
-
         const privateConversation =
           await context.prisma.conversation.findUnique({
             where: {
