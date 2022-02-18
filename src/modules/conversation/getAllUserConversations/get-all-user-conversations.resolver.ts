@@ -6,7 +6,7 @@ import { applyMiddleware } from '@src/middleware/apply-middleware'
 
 const resolvers: ResolverMap = {
   Query: {
-    getAllConversations: applyMiddleware(
+    getAllUserConversations: applyMiddleware(
       authorization,
       async (_parent, _args, context: Context) => {
         if (!context.userId) {

@@ -1,31 +1,26 @@
 import * as yup from 'yup'
 import { ApolloError } from 'apollo-server-core'
-import { UserInputError } from 'apollo-server'
 import { Context } from '@src/context'
 import { ResolverMap } from '@src/utils/graphql-types'
 import { authorization } from '@src/middleware/authorization.middleware'
 import { applyMiddleware } from '@src/middleware/apply-middleware'
-import { formatYupError } from '@src/utils/format-yup-error'
-import { AddUserToConversationInput } from '@src/modules/conversation/addUserToConversation/add-user-to-conversation.input'
+import { UserInputError } from 'apollo-server';
+import { formatYupError } from '@src/utils/format-yup-error';
+import { LeaveConversationInput } from '@src/modules/conversation/leaveConversation/leave-conversation';
 
-const addConversationUsersSchema = yup.object().shape({
+const leaveConversationSchema = yup.object().shape({
   conversationId: yup.number().min(0),
-  userId: yup.number().min(0),
 })
 
 const resolvers: ResolverMap = {
   Mutation: {
-    addUserToConversation: applyMiddleware(
+    leaveConversation: applyMiddleware(
       authorization,
-      async (
-        _parent,
-        args: { data: AddUserToConversationInput },
-        context: Context
-      ) => {
-        const { conversationId, userId } = args.data
+      async (_parent, args: { data: LeaveConversationInput }, context: Context) => {
+        const { conversationId } = args.data
 
         try {
-          await addConversationUsersSchema.validate(args.data, {
+          await leaveConversationSchema.validate(args.data, {
             abortEarly: false,
           })
         } catch (error) {
@@ -48,28 +43,20 @@ const resolvers: ResolverMap = {
           })
 
         if (!conversationWithUser.length) {
-          throw new ApolloError('Cannot add new user from this account')
+          throw new ApolloError('Cannot leave conversation')
         }
 
         try {
-          await context.prisma.user.findUnique({
+          await context.prisma.conversationUser.delete({
             where: {
-              id: userId,
-            },
+              userId_conversationId: {
+                userId: parseInt(context.userId),
+                conversationId
+              }
+            }
           })
-
-          await context.prisma.conversationUser.create({
-            data: {
-              user: {
-                connect: { id: userId },
-              },
-              conversation: {
-                connect: { id: conversationId },
-              },
-            },
-          })
-        } catch (err) {
-          throw new ApolloError('Cannot add users to conversation')
+        } catch (error) {
+          throw new ApolloError('Cannot leave conversation')
         }
 
         return true
