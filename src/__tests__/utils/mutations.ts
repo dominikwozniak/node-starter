@@ -72,7 +72,6 @@ export const addUserToConversation = gql`
   mutation addUserToConversation($data: AddUserToConversationInput) {
     addUserToConversation(data: $data)
   }
-
 `
 
 export const createConversationUserMutation = gql`

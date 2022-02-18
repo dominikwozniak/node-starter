@@ -10,6 +10,15 @@ export const whoAmI = gql`
   }
 `
 
+export const getAllUserConversations = gql`
+  query getAllUserConversations {
+    getAllUserConversations {
+      id
+      name
+    }
+  }
+`
+
 export const getMessagesFromConversationQuery = gql`
   query getMessagesFromConversation($data: GetMessagesFromConversationInput) {
     getMessagesFromConversation(data: $data) {
@@ -33,21 +42,6 @@ export const getMessagesPaginatedFromConversationQuery = gql`
       author {
         email
         name
-      }
-    }
-  }
-`
-
-export const getAllConversations = gql`
-  query getAllConversations {
-    getAllConversations {
-      id
-      participants {
-        userId
-      }
-      messages {
-        id
-        text
       }
     }
   }

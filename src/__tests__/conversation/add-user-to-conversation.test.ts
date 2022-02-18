@@ -3,7 +3,7 @@ import argon2 from 'argon2'
 import { createTestClient } from 'apollo-server-testing'
 import { PrismaClient } from '@prisma/client'
 import { constructTestServer } from '@src/__tests__/utils/server'
-import { addUserToConversation, joinToConversation } from '@src/__tests__/utils/mutations';
+import { addUserToConversation } from '@src/__tests__/utils/mutations'
 
 const client = new PrismaClient()
 const redis = new Redis()
@@ -84,7 +84,7 @@ describe('Add user to conversation', () => {
       variables: {
         data: {
           conversationId: publicConversationId,
-          userId: secondUserId
+          userId: secondUserId,
         },
       },
     })
@@ -117,7 +117,7 @@ describe('Add user to conversation', () => {
       variables: {
         data: {
           conversationId: publicConversationId,
-          userId: thirdUserId
+          userId: thirdUserId,
         },
       },
     })
@@ -139,7 +139,7 @@ describe('Add user to conversation', () => {
       variables: {
         data: {
           conversationId: publicConversationId,
-          userId: secondUserId
+          userId: secondUserId,
         },
       },
     })
@@ -147,7 +147,6 @@ describe('Add user to conversation', () => {
     expect(res.errors![0]).toBeDefined()
     expect(res.errors![0].message).toBe('Cannot add users to conversation')
   })
-
 
   test('Check auth failed', async () => {
     const { server } = constructTestServer({
@@ -162,7 +161,7 @@ describe('Add user to conversation', () => {
       variables: {
         data: {
           conversationId: publicConversationId,
-          userId: thirdUserId
+          userId: thirdUserId,
         },
       },
     })
