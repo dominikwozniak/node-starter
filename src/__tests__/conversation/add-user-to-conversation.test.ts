@@ -3,7 +3,7 @@ import argon2 from 'argon2'
 import { createTestClient } from 'apollo-server-testing'
 import { PrismaClient } from '@prisma/client'
 import { constructTestServer } from '@src/__tests__/utils/server'
-import { joinToConversation } from '@src/__tests__/utils/mutations'
+import { addUserToConversation, joinToConversation } from '@src/__tests__/utils/mutations';
 
 const client = new PrismaClient()
 const redis = new Redis()
@@ -15,9 +15,10 @@ const userPassword = 'Test123'
 
 const secondUserEmail = 'test2@mail.com'
 const secondUserId = 2
+const thirdUserEmail = 'test3@mail.com'
+const thirdUserId = 3
 
 const publicConversationId = 1
-const privateConversationId = 2
 const conversationName = 'test conversation'
 
 beforeAll(async () => {
@@ -40,24 +41,19 @@ beforeAll(async () => {
     },
   })
 
-  await client.conversation.create({
+  await client.user.create({
     data: {
-      name: conversationName,
-      isPrivate: false,
-      participants: {
-        create: {
-          user: {
-            connect: { id: userId },
-          },
-        },
-      },
+      name: userName,
+      email: thirdUserEmail,
+      password: hashedPassword,
+      confirmed: true,
     },
   })
 
   await client.conversation.create({
     data: {
       name: conversationName,
-      isPrivate: true,
+      isPrivate: false,
       participants: {
         create: {
           user: {
@@ -74,20 +70,21 @@ afterAll(async () => {
   await redis.quit()
 })
 
-describe('Join to conversation', () => {
-  test('Check joining', async () => {
+describe('Add user to conversation', () => {
+  test('Check adding user', async () => {
     const { server } = constructTestServer({
       prisma: client,
-      userId: secondUserId,
+      userId: userId,
       redis,
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)
     const res = await mutate({
-      mutation: joinToConversation,
+      mutation: addUserToConversation,
       variables: {
         data: {
           conversationId: publicConversationId,
+          userId: secondUserId
         },
       },
     })
@@ -101,45 +98,35 @@ describe('Join to conversation', () => {
       },
     })
 
-    expect(res.data.joinToConversation).toBeTruthy()
+    expect(res.data.addUserToConversation).toBeTruthy()
     expect(conversation).toBeDefined()
     expect(conversation!.participants.length).toBe(2)
     expect(conversation!.participants[1].userId).toBe(secondUserId)
   })
 
-  test('Check private conversation joining', async () => {
+  test('Check adding user from invalid account', async () => {
     const { server } = constructTestServer({
       prisma: client,
-      userId: secondUserId,
+      userId: thirdUserId,
       redis,
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)
     const res = await mutate({
-      mutation: joinToConversation,
+      mutation: addUserToConversation,
       variables: {
         data: {
-          conversationId: privateConversationId,
+          conversationId: publicConversationId,
+          userId: thirdUserId
         },
       },
     })
 
-    const conversation = await client.conversation.findUnique({
-      where: {
-        id: privateConversationId,
-      },
-      include: {
-        participants: true,
-      },
-    })
-
     expect(res.errors![0]).toBeDefined()
-    expect(res.errors![0].message).toBe('Cannot join to private conversation')
-    expect(conversation).toBeDefined()
-    expect(conversation!.participants.length).toBe(1)
+    expect(res.errors![0].message).toBe('Cannot add new user from this account')
   })
 
-  test('Check joining to conversation if user already joined', async () => {
+  test('Check adding user if user already added', async () => {
     const { server } = constructTestServer({
       prisma: client,
       userId: userId,
@@ -148,17 +135,19 @@ describe('Join to conversation', () => {
     // @ts-ignore
     const { mutate } = createTestClient(server)
     const res = await mutate({
-      mutation: joinToConversation,
+      mutation: addUserToConversation,
       variables: {
         data: {
           conversationId: publicConversationId,
+          userId: secondUserId
         },
       },
     })
 
     expect(res.errors![0]).toBeDefined()
-    expect(res.errors![0].message).toBe('Cannot add user to conversation')
+    expect(res.errors![0].message).toBe('Cannot add users to conversation')
   })
+
 
   test('Check auth failed', async () => {
     const { server } = constructTestServer({
@@ -169,10 +158,11 @@ describe('Join to conversation', () => {
     // @ts-ignore
     const { mutate } = createTestClient(server)
     const res = await mutate({
-      mutation: joinToConversation,
+      mutation: addUserToConversation,
       variables: {
         data: {
           conversationId: publicConversationId,
+          userId: thirdUserId
         },
       },
     })

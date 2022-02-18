@@ -66,6 +66,12 @@ export const joinToConversation = gql`
   mutation joinToConversation($data: JoinToConversationInput) {
     joinToConversation(data: $data)
   }
+`
+
+export const addUserToConversation = gql`
+  mutation addUserToConversation($data: AddUserToConversationInput) {
+    addUserToConversation(data: $data)
+  }
 
 `
 
