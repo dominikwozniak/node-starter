@@ -56,6 +56,12 @@ export const createConversationMutation = gql`
   }
 `
 
+export const updateConversationMutation = gql`
+    mutation updateConversation($data: UpdateConversationInput) {
+        updateConversation(data: $data)
+    }
+`
+
 export const createConversationUserMutation = gql`
   mutation createConversationUser($data: CreateConversationUserInput) {
     createConversationUser(data: $data)

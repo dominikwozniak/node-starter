@@ -3,7 +3,7 @@ import argon2 from 'argon2'
 import { createTestClient } from 'apollo-server-testing'
 import { PrismaClient } from '@prisma/client'
 import { constructTestServer } from '@src/__tests__/utils/server'
-import { createConversationMutation } from '@src/__tests__/utils/mutations';
+import { createConversationMutation } from '@src/__tests__/utils/mutations'
 
 const client = new PrismaClient()
 const redis = new Redis()
@@ -41,7 +41,7 @@ describe('Create conversation', () => {
       variables: {
         data: {
           name: conversationName,
-          isPrivate: false
+          isPrivate: false,
         },
       },
     })
@@ -59,7 +59,7 @@ describe('Create conversation', () => {
       mutation: createConversationMutation,
       variables: {
         data: {
-          isPrivate: true
+          isPrivate: true,
         },
       },
     })
@@ -77,7 +77,7 @@ describe('Create conversation', () => {
       mutation: createConversationMutation,
       variables: {
         data: {
-          name: conversationName
+          name: conversationName,
         },
       },
     })
@@ -88,7 +88,11 @@ describe('Create conversation', () => {
   })
 
   test('Check auth failed', async () => {
-    const { server } = constructTestServer({ prisma: client, userId: null, redis })
+    const { server } = constructTestServer({
+      prisma: client,
+      userId: null,
+      redis,
+    })
     // @ts-ignore
     const { mutate } = createTestClient(server)
     const res = await mutate({
@@ -96,7 +100,7 @@ describe('Create conversation', () => {
       variables: {
         data: {
           name: conversationName,
-          isPrivate: false
+          isPrivate: false,
         },
       },
     })
