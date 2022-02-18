@@ -1,7 +1,0 @@
-type Mutation {
-  createConversationUser(data: CreateConversationUserInput): Boolean!
-}
-
-input CreateConversationUserInput {
-  conversationId: Int!
-}

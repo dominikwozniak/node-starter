@@ -1,0 +1,7 @@
+type Mutation {
+  joinToConversation(data: JoinToConversationInput): Boolean!
+}
+
+input JoinToConversationInput {
+  conversationId: Int!
+}
