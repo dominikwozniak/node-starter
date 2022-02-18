@@ -1,14 +1,37 @@
+import * as yup from 'yup'
 import { ApolloError } from 'apollo-server-core'
 import { Context } from '@src/context'
 import { ResolverMap } from '@src/utils/graphql-types'
 import { authorization } from '@src/middleware/authorization.middleware'
 import { applyMiddleware } from '@src/middleware/apply-middleware'
+import { UserInputError } from 'apollo-server';
+import { formatYupError } from '@src/utils/format-yup-error';
+import { CreateConversationInput } from '@src/modules/conversation/createConversation/create-conversation.input'
+
+const createConversationSchema = yup.object().shape({
+  name: yup.string().min(2).max(255),
+  private: yup.boolean()
+})
+
 
 const resolvers: ResolverMap = {
   Mutation: {
     createConversation: applyMiddleware(
       authorization,
-      async (_parent, _args, context: Context) => {
+      async (_parent, args: { data: CreateConversationInput }, context: Context) => {
+        const { name, isPrivate } = args.data
+
+        try {
+          await createConversationSchema.validate(args.data, {
+            abortEarly: false,
+          })
+        } catch (error) {
+          throw new UserInputError(
+            'Cannot add user to conversation',
+            formatYupError(error)
+          )
+        }
+
         if (!context.userId) {
           throw new ApolloError('Authorization failed')
         }
@@ -16,6 +39,8 @@ const resolvers: ResolverMap = {
         // TODO: try-catch
         const conversation = await context.prisma.conversation.create({
           data: {
+            name,
+            private: isPrivate,
             participants: {
               create: {
                 user: {

@@ -1,3 +1,8 @@
 type Mutation {
-  createConversation: Conversation
+  createConversation(data: CreateConversationInput): Conversation!
+}
+
+input CreateConversationInput {
+  name: String!
+  isPrivate: Boolean!
 }

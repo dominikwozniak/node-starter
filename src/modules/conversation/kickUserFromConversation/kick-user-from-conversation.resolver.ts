@@ -1,30 +1,31 @@
 import * as yup from 'yup'
 import { ApolloError } from 'apollo-server-core'
+import { UserInputError } from 'apollo-server'
 import { Context } from '@src/context'
 import { ResolverMap } from '@src/utils/graphql-types'
 import { authorization } from '@src/middleware/authorization.middleware'
 import { applyMiddleware } from '@src/middleware/apply-middleware'
-import { UserInputError } from 'apollo-server'
 import { formatYupError } from '@src/utils/format-yup-error'
-import { LeaveConversationInput } from '@src/modules/conversation/leaveConversation/leave-conversation.input'
+import { AddUserToConversationInput } from '@src/modules/conversation/addUserToConversation/add-user-to-conversation.input'
 
-const leaveConversationSchema = yup.object().shape({
+const kickUserFromConversationSchema = yup.object().shape({
   conversationId: yup.number().min(0),
+  userId: yup.number().min(0),
 })
 
 const resolvers: ResolverMap = {
   Mutation: {
-    leaveConversation: applyMiddleware(
+    kickUserFromConversation: applyMiddleware(
       authorization,
       async (
         _parent,
-        args: { data: LeaveConversationInput },
+        args: { data: AddUserToConversationInput },
         context: Context
       ) => {
-        const { conversationId } = args.data
+        const { conversationId, userId } = args.data
 
         try {
-          await leaveConversationSchema.validate(args.data, {
+          await kickUserFromConversationSchema.validate(args.data, {
             abortEarly: false,
           })
         } catch (error) {
@@ -38,6 +39,10 @@ const resolvers: ResolverMap = {
           throw new ApolloError('Authorization failed')
         }
 
+        if (parseInt(context.userId) === userId) {
+          throw new ApolloError('Cannot kick yourself from conversation')
+        }
+
         const conversationWithUser =
           await context.prisma.conversationUser.findMany({
             where: {
@@ -47,20 +52,20 @@ const resolvers: ResolverMap = {
           })
 
         if (!conversationWithUser.length) {
-          throw new ApolloError('Cannot leave conversation')
+          throw new ApolloError('Cannot kick user from conversation')
         }
 
         try {
           await context.prisma.conversationUser.delete({
             where: {
               userId_conversationId: {
-                userId: parseInt(context.userId),
+                userId,
                 conversationId,
               },
             },
           })
-        } catch (error) {
-          throw new ApolloError('Cannot leave conversation')
+        } catch (err) {
+          throw new ApolloError('Cannot kick user from conversation')
         }
 
         return true

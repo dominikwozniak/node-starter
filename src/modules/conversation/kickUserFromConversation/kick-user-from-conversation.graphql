@@ -1,0 +1,8 @@
+type Mutation {
+  kickUserFromConversation(data: KickUserFromConversationInput): Boolean!
+}
+
+input KickUserFromConversationInput {
+  conversationId: Int!
+  userId: Int!
+}
