@@ -9,7 +9,7 @@ import { formatYupError } from '@src/utils/format-yup-error'
 import { CreateConversationInput } from '@src/modules/conversation/createConversation/create-conversation.input'
 
 const createConversationSchema = yup.object().shape({
-  name: yup.string().min(2).max(255),
+  name: yup.string(),
   private: yup.boolean(),
 })
 
@@ -30,7 +30,7 @@ const resolvers: ResolverMap = {
           })
         } catch (error) {
           throw new UserInputError(
-            'Cannot add user to conversation',
+            'Cannot create conversation with provided data',
             formatYupError(error)
           )
         }

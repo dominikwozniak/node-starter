@@ -3,6 +3,6 @@ type Mutation {
 }
 
 input CreateConversationInput {
-  name: String!
-  isPrivate: Boolean!
+  name: String
+  isPrivate: Boolean
 }
