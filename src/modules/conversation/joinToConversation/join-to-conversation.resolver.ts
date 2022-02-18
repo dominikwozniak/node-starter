@@ -7,6 +7,7 @@ import { authorization } from '@src/middleware/authorization.middleware'
 import { applyMiddleware } from '@src/middleware/apply-middleware'
 import { JoinToConversationInput } from '@src/modules/conversation/joinToConversation/join-to-conversation.input'
 import { formatYupError } from '@src/utils/format-yup-error'
+import { checkUserInConversation } from '@src/utils/conversation/check-user-in-conversation';
 
 const joinToConversationSchema = yup.object().shape({
   conversationId: yup.number().min(0),
@@ -38,17 +39,7 @@ const resolvers: ResolverMap = {
           throw new ApolloError('Authorization failed')
         }
 
-        const conversationWithUser =
-          await context.prisma.conversationUser.findMany({
-            where: {
-              userId: parseInt(context.userId),
-              conversationId,
-            },
-          })
-
-        if (conversationWithUser.length) {
-          throw new ApolloError('User already in conversation')
-        }
+        await checkUserInConversation(context, conversationId, 'User already in conversation')
 
         const privateConversation =
           await context.prisma.conversation.findUnique({

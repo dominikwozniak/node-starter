@@ -7,6 +7,7 @@ import { applyMiddleware } from '@src/middleware/apply-middleware'
 import { UserInputError } from 'apollo-server'
 import { formatYupError } from '@src/utils/format-yup-error'
 import { LeaveConversationInput } from '@src/modules/conversation/leaveConversation/leave-conversation.input'
+import { checkUserInConversation } from '@src/utils/conversation/check-user-in-conversation';
 
 const leaveConversationSchema = yup.object().shape({
   conversationId: yup.number().min(0),
@@ -38,17 +39,7 @@ const resolvers: ResolverMap = {
           throw new ApolloError('Authorization failed')
         }
 
-        const conversationWithUser =
-          await context.prisma.conversationUser.findMany({
-            where: {
-              userId: parseInt(context.userId),
-              conversationId,
-            },
-          })
-
-        if (!conversationWithUser.length) {
-          throw new ApolloError('Cannot leave conversation')
-        }
+        await checkUserInConversation(context, conversationId, 'Cannot leave conversation')
 
         try {
           await context.prisma.conversationUser.delete({

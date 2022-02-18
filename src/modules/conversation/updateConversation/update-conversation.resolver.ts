@@ -8,6 +8,7 @@ import { applyMiddleware } from '@src/middleware/apply-middleware'
 import { UserInputError } from 'apollo-server'
 import { formatYupError } from '@src/utils/format-yup-error'
 import { UpdateConversationInput } from '@src/modules/conversation/updateConversation/update-conversation.input'
+import { checkUserInConversation } from '@src/utils/conversation/check-user-in-conversation';
 
 const updateConversationSchema = yup.object().shape({
   conversationId: yup.number().min(0),
@@ -36,22 +37,7 @@ const resolvers: ResolverMap = {
             formatYupError(error)
           )
         }
-
-        if (!context.userId) {
-          throw new ApolloError('Authorization failed')
-        }
-
-        const conversationWithUser =
-          await context.prisma.conversationUser.findMany({
-            where: {
-              userId: parseInt(context.userId),
-              conversationId,
-            },
-          })
-
-        if (!conversationWithUser.length) {
-          throw new ApolloError('Cannot update conversation with provided user')
-        }
+        await checkUserInConversation(context, conversationId, 'Cannot update conversation')
 
         try {
           await context.prisma.conversation.update({

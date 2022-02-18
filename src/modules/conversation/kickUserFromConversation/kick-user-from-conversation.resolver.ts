@@ -7,6 +7,7 @@ import { authorization } from '@src/middleware/authorization.middleware'
 import { applyMiddleware } from '@src/middleware/apply-middleware'
 import { formatYupError } from '@src/utils/format-yup-error'
 import { AddUserToConversationInput } from '@src/modules/conversation/addUserToConversation/add-user-to-conversation.input'
+import { checkUserInConversation } from '@src/utils/conversation/check-user-in-conversation';
 
 const kickUserFromConversationSchema = yup.object().shape({
   conversationId: yup.number().min(0),
@@ -43,17 +44,7 @@ const resolvers: ResolverMap = {
           throw new ApolloError('Cannot kick yourself from conversation')
         }
 
-        const conversationWithUser =
-          await context.prisma.conversationUser.findMany({
-            where: {
-              userId: parseInt(context.userId),
-              conversationId,
-            },
-          })
-
-        if (!conversationWithUser.length) {
-          throw new ApolloError('Cannot kick user from conversation')
-        }
+        await checkUserInConversation(context, conversationId, 'Cannot kick user from conversation')
 
         try {
           await context.prisma.conversationUser.delete({

@@ -7,6 +7,7 @@ import { authorization } from '@src/middleware/authorization.middleware'
 import { applyMiddleware } from '@src/middleware/apply-middleware'
 import { formatYupError } from '@src/utils/format-yup-error'
 import { AddUserToConversationInput } from '@src/modules/conversation/addUserToConversation/add-user-to-conversation.input'
+import { checkUserInConversation } from '@src/utils/conversation/check-user-in-conversation';
 
 const addConversationUsersSchema = yup.object().shape({
   conversationId: yup.number().min(0),
@@ -35,21 +36,7 @@ const resolvers: ResolverMap = {
           )
         }
 
-        if (!context.userId) {
-          throw new ApolloError('Authorization failed')
-        }
-
-        const conversationWithUser =
-          await context.prisma.conversationUser.findMany({
-            where: {
-              userId: parseInt(context.userId),
-              conversationId,
-            },
-          })
-
-        if (!conversationWithUser.length) {
-          throw new ApolloError('Cannot add new user from this account')
-        }
+        await checkUserInConversation(context, conversationId, 'Cannot add new user from this account')
 
         try {
           await context.prisma.user.findUnique({
