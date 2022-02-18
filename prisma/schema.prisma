@@ -44,7 +44,7 @@ model ConversationMessage {
 model Conversation {
   id              Int       @id @default(autoincrement())
   name            String?
-  private         Boolean   @default(false)
+  isPrivate       Boolean   @default(false)
   participants    ConversationUser[]
   messages        ConversationMessage[]
 

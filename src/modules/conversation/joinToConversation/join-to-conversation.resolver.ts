@@ -57,7 +57,7 @@ const resolvers: ResolverMap = {
             },
           })
 
-        if (privateConversation?.private) {
+        if (privateConversation?.isPrivate) {
           throw new ApolloError('Cannot join to private conversation')
         }
 
