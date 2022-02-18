@@ -80,6 +80,12 @@ export const leaveConversation = gql`
   }
 `
 
+export const kickUserFromConversation = gql`
+  mutation kickUserFromConversation($data: KickUserFromConversationInput) {
+    kickUserFromConversation(data: $data)
+  }
+`
+
 export const createConversationUserMutation = gql`
   mutation createConversationUser($data: CreateConversationUserInput) {
     createConversationUser(data: $data)

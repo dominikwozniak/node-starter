@@ -3,7 +3,7 @@ import argon2 from 'argon2'
 import { createTestClient } from 'apollo-server-testing'
 import { PrismaClient } from '@prisma/client'
 import { constructTestServer } from '@src/__tests__/utils/server'
-import { leaveConversation } from '@src/__tests__/utils/mutations'
+import { kickUserFromConversation } from '@src/__tests__/utils/mutations';
 
 const client = new PrismaClient()
 const redis = new Redis()
@@ -16,8 +16,7 @@ const userPassword = 'Test123'
 const secondUserEmail = 'test2@mail.com'
 const secondUserId = 2
 
-const firstConversationId = 1
-const secondConversationId = 2
+const conversationId = 1
 const conversationName = 'test conversation'
 
 beforeAll(async () => {
@@ -54,16 +53,13 @@ beforeAll(async () => {
     },
   })
 
-  await client.conversation.create({
+  await client.conversationUser.create({
     data: {
-      name: conversationName,
-      isPrivate: true,
-      participants: {
-        create: {
-          user: {
-            connect: { id: secondUserId },
-          },
-        },
+      user: {
+        connect: { id: secondUserId },
+      },
+      conversation: {
+        connect: { id: conversationId },
       },
     },
   })
@@ -74,58 +70,60 @@ afterAll(async () => {
   await redis.quit()
 })
 
-describe('Leave conversation', () => {
-  test('Check leaving', async () => {
+describe('Kick user from conversation', () => {
+  test('Check kicking', async () => {
     const { server } = constructTestServer({
       prisma: client,
-      userId: userId,
+      userId,
       redis,
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)
     const res = await mutate({
-      mutation: leaveConversation,
+      mutation: kickUserFromConversation,
       variables: {
         data: {
-          conversationId: firstConversationId,
+          conversationId: conversationId,
+          userId: secondUserId
         },
       },
     })
 
     const conversation = await client.conversation.findUnique({
       where: {
-        id: firstConversationId,
+        id: conversationId,
       },
       include: {
         participants: true,
       },
     })
 
-    expect(res.data.leaveConversation).toBeTruthy()
+    expect(res.data.kickUserFromConversation).toBeTruthy()
     expect(conversation).toBeDefined()
-    expect(conversation!.participants.length).toBe(0)
+    expect(conversation!.participants.length).toBe(1)
   })
 
-  test('Check wrong user leaving', async () => {
+  test('Check kick yourself', async () => {
     const { server } = constructTestServer({
       prisma: client,
-      userId: userId,
+      userId,
       redis,
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)
     const res = await mutate({
-      mutation: leaveConversation,
+      mutation: kickUserFromConversation,
       variables: {
         data: {
-          conversationId: secondConversationId,
+          conversationId: conversationId,
+          userId
         },
       },
     })
 
     const conversation = await client.conversation.findUnique({
       where: {
-        id: secondConversationId,
+        id: conversationId,
       },
       include: {
         participants: true,
@@ -133,7 +131,40 @@ describe('Leave conversation', () => {
     })
 
     expect(res.errors![0]).toBeDefined()
-    expect(res.errors![0].message).toBe('Cannot leave conversation')
+    expect(res.errors![0].message).toBe('Cannot kick yourself from conversation')
+    expect(conversation).toBeDefined()
+    expect(conversation!.participants.length).toBe(1)
+  })
+
+  test('Check kick from wrong conversation', async () => {
+    const { server } = constructTestServer({
+      prisma: client,
+      userId: secondUserId,
+      redis,
+    })
+    // @ts-ignore
+    const { mutate } = createTestClient(server)
+    const res = await mutate({
+      mutation: kickUserFromConversation,
+      variables: {
+        data: {
+          conversationId: conversationId,
+          userId
+        },
+      },
+    })
+
+    const conversation = await client.conversation.findUnique({
+      where: {
+        id: conversationId,
+      },
+      include: {
+        participants: true,
+      },
+    })
+
+    expect(res.errors![0]).toBeDefined()
+    expect(res.errors![0].message).toBe('Cannot kick user from conversation')
     expect(conversation).toBeDefined()
     expect(conversation!.participants.length).toBe(1)
   })
@@ -147,10 +178,11 @@ describe('Leave conversation', () => {
     // @ts-ignore
     const { mutate } = createTestClient(server)
     const res = await mutate({
-      mutation: leaveConversation,
+      mutation: kickUserFromConversation,
       variables: {
         data: {
-          conversationId: firstConversationId,
+          conversationId: conversationId,
+          userId: secondUserId
         },
       },
     })

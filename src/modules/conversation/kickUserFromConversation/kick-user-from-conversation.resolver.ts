@@ -31,7 +31,7 @@ const resolvers: ResolverMap = {
           })
         } catch (error) {
           throw new UserInputError(
-            'Cannot add user to conversation',
+            'Cannot kick user from conversation',
             formatYupError(error)
           )
         }
