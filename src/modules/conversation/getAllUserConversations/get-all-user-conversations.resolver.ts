@@ -1,8 +1,8 @@
-import { ApolloError } from 'apollo-server-core';
-import { Context } from '@src/context';
-import { ResolverMap } from '@src/utils/graphql-types';
-import { authorization } from '@src/middleware/authorization.middleware';
-import { applyMiddleware } from '@src/middleware/apply-middleware';
+import { ApolloError } from 'apollo-server-core'
+import { Context } from '@src/context'
+import { ResolverMap } from '@src/utils/graphql-types'
+import { authorization } from '@src/middleware/authorization.middleware'
+import { applyMiddleware } from '@src/middleware/apply-middleware'
 
 const resolvers: ResolverMap = {
   Query: {
