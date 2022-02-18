@@ -5,26 +5,27 @@ import { Context } from '@src/context'
 import { ResolverMap } from '@src/utils/graphql-types'
 import { authorization } from '@src/middleware/authorization.middleware'
 import { applyMiddleware } from '@src/middleware/apply-middleware'
-import { JoinToConversationInput } from '@src/modules/conversation/joinToConversation/join-to-conversation.input'
 import { formatYupError } from '@src/utils/format-yup-error'
+import { AddUserToConversationInput } from '@src/modules/conversation/addUserToConversation/add-user-to-conversation.input'
 
-const joinToConversationSchema = yup.object().shape({
+const addConversationUsersSchema = yup.object().shape({
   conversationId: yup.number().min(0),
+  userId: yup.number().min(0),
 })
 
 const resolvers: ResolverMap = {
   Mutation: {
-    joinToConversation: applyMiddleware(
+    addUserToConversation: applyMiddleware(
       authorization,
       async (
         _parent,
-        args: { data: JoinToConversationInput },
+        args: { data: AddUserToConversationInput },
         context: Context
       ) => {
-        const { conversationId } = args.data
+        const { conversationId, userId } = args.data
 
         try {
-          await joinToConversationSchema.validate(args.data, {
+          await addConversationUsersSchema.validate(args.data, {
             abortEarly: false,
           })
         } catch (error) {
@@ -46,34 +47,29 @@ const resolvers: ResolverMap = {
             },
           })
 
-        if (conversationWithUser.length) {
-          throw new ApolloError('User already in conversation')
-        }
-
-        const privateConversation =
-          await context.prisma.conversation.findUnique({
-            where: {
-              id: conversationId,
-            },
-          })
-
-        if (privateConversation?.private) {
-          throw new ApolloError('Cannot join to private conversation')
+        if (!conversationWithUser.length) {
+          throw new ApolloError('Cannot add new user from this account')
         }
 
         try {
+          await context.prisma.user.findUnique({
+            where: {
+              id: userId
+            }
+          })
+
           await context.prisma.conversationUser.create({
             data: {
               user: {
-                connect: { id: parseInt(context.userId) },
+                connect: { id: userId },
               },
               conversation: {
                 connect: { id: conversationId },
               },
             },
           })
-        } catch (error) {
-          throw new ApolloError('Cannot add user to conversation')
+        } catch (err) {
+          throw new ApolloError('Cannot add users to conversation')
         }
 
         return true
