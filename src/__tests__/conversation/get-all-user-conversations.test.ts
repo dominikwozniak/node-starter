@@ -2,11 +2,13 @@ import Redis from 'ioredis'
 import argon2 from 'argon2'
 import { createTestClient } from 'apollo-server-testing'
 import { PrismaClient } from '@prisma/client'
+import { userLoader } from '@src/loaders/userLoader'
 import { constructTestServer } from '@src/__tests__/utils/server'
 import { getAllUserConversations } from '@src/__tests__/utils/queries'
 
 const client = new PrismaClient()
 const redis = new Redis()
+const loader = userLoader()
 
 const userId = 1
 const userName = 'test'
@@ -79,6 +81,7 @@ describe('Get all users conversations', () => {
       prisma: client,
       userId: userId,
       redis,
+      userLoader: loader
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)
@@ -98,6 +101,7 @@ describe('Get all users conversations', () => {
       prisma: client,
       userId: secondUserId,
       redis,
+      userLoader: loader
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)
@@ -113,6 +117,7 @@ describe('Get all users conversations', () => {
       prisma: client,
       userId: null,
       redis,
+      userLoader: loader
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)
