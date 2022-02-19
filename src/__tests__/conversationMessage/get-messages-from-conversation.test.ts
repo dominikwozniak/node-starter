@@ -83,7 +83,7 @@ describe('Get messages from a conversation', () => {
       userId,
       redis,
       pubsub,
-      userLoader: loader
+      userLoader: loader,
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)
@@ -109,7 +109,7 @@ describe('Get messages from a conversation', () => {
       userId,
       redis,
       pubsub,
-      userLoader: loader
+      userLoader: loader,
     })
 
     await client.conversationMessage.create({
@@ -156,7 +156,7 @@ describe('Get messages from a conversation', () => {
       userId: secondUserId,
       redis,
       pubsub,
-      userLoader: loader
+      userLoader: loader,
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)
@@ -181,7 +181,7 @@ describe('Get messages from a conversation', () => {
       userId: null,
       redis,
       pubsub,
-      userLoader: loader
+      userLoader: loader,
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)

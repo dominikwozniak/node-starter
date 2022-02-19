@@ -103,7 +103,7 @@ describe('Get paginated messages from a conversation', () => {
       userId,
       redis,
       pubsub,
-      userLoader: loader
+      userLoader: loader,
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)
@@ -133,7 +133,7 @@ describe('Get paginated messages from a conversation', () => {
       userId,
       redis,
       pubsub,
-      userLoader: loader
+      userLoader: loader,
     })
 
     // @ts-ignore
@@ -170,7 +170,7 @@ describe('Get paginated messages from a conversation', () => {
       userId: secondUserId,
       redis,
       pubsub,
-      userLoader: loader
+      userLoader: loader,
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)
@@ -197,7 +197,7 @@ describe('Get paginated messages from a conversation', () => {
       userId: null,
       redis,
       pubsub,
-      userLoader: loader
+      userLoader: loader,
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)
