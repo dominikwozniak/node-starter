@@ -34,7 +34,9 @@ export const getMessagesFromConversation = gql`
 `
 
 export const getMessagesPaginatedFromConversation = gql`
-  query getMessagesPaginatedFromConversation($data: GetMessagesPaginatedFromConversationInput) {
+  query getMessagesPaginatedFromConversation(
+    $data: GetMessagesPaginatedFromConversationInput
+  ) {
     getMessagesPaginatedFromConversation(data: $data) {
       id
       text

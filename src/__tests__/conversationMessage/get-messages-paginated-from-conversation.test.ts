@@ -4,7 +4,7 @@ import { PubSub } from 'graphql-subscriptions'
 import { createTestClient } from 'apollo-server-testing'
 import { PrismaClient } from '@prisma/client'
 import { constructTestServer } from '@src/__tests__/utils/server'
-import { getMessagesFromConversation, getMessagesPaginatedFromConversation } from '@src/__tests__/utils/queries';
+import { getMessagesPaginatedFromConversation } from '@src/__tests__/utils/queries'
 
 const client = new PrismaClient()
 const redis = new Redis()
@@ -87,7 +87,6 @@ beforeAll(async () => {
       conversation: true,
     },
   })
-
 })
 
 afterAll(async () => {
@@ -111,14 +110,18 @@ describe('Get paginated messages from a conversation', () => {
         data: {
           conversationId: conversationId,
           skip: 0,
-          take: 2
+          take: 2,
         },
       },
     })
 
     expect(res.data.getMessagesPaginatedFromConversation.length).toBe(2)
-    expect(res.data.getMessagesPaginatedFromConversation[0].text).toBe(secondMessageText)
-    expect(res.data.getMessagesPaginatedFromConversation[1].text).toBe(firstMessageText)
+    expect(res.data.getMessagesPaginatedFromConversation[0].text).toBe(
+      secondMessageText
+    )
+    expect(res.data.getMessagesPaginatedFromConversation[1].text).toBe(
+      firstMessageText
+    )
   })
 
   test('Check getting second message', async () => {
@@ -137,16 +140,24 @@ describe('Get paginated messages from a conversation', () => {
         data: {
           conversationId: conversationId,
           skip: 1,
-          take: 1
+          take: 1,
         },
       },
     })
 
     expect(res.data.getMessagesPaginatedFromConversation.length).toBe(1)
-    expect(res.data.getMessagesPaginatedFromConversation[0].text).toBe(firstMessageText)
-    expect(res.data.getMessagesPaginatedFromConversation[0].author.id).toBe(userId)
-    expect(res.data.getMessagesPaginatedFromConversation[0].author.email).toBe(userEmail)
-    expect(res.data.getMessagesPaginatedFromConversation[0].author.name).toBe(userName)
+    expect(res.data.getMessagesPaginatedFromConversation[0].text).toBe(
+      firstMessageText
+    )
+    expect(res.data.getMessagesPaginatedFromConversation[0].author.id).toBe(
+      userId
+    )
+    expect(res.data.getMessagesPaginatedFromConversation[0].author.email).toBe(
+      userEmail
+    )
+    expect(res.data.getMessagesPaginatedFromConversation[0].author.name).toBe(
+      userName
+    )
   })
 
   test('Check getting messages with wrong user', async () => {
