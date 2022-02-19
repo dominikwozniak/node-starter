@@ -3,12 +3,14 @@ import argon2 from 'argon2'
 import { PubSub } from 'graphql-subscriptions'
 import { createTestClient } from 'apollo-server-testing'
 import { PrismaClient } from '@prisma/client'
+import { userLoader } from '@src/loaders/userLoader'
 import { constructTestServer } from '@src/__tests__/utils/server'
 import { getMessagesPaginatedFromConversation } from '@src/__tests__/utils/queries'
 
 const client = new PrismaClient()
 const redis = new Redis()
 const pubsub = new PubSub()
+const loader = userLoader()
 
 const userId = 1
 const userName = 'test'
@@ -101,6 +103,7 @@ describe('Get paginated messages from a conversation', () => {
       userId,
       redis,
       pubsub,
+      userLoader: loader
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)
@@ -130,6 +133,7 @@ describe('Get paginated messages from a conversation', () => {
       userId,
       redis,
       pubsub,
+      userLoader: loader
     })
 
     // @ts-ignore
@@ -166,6 +170,7 @@ describe('Get paginated messages from a conversation', () => {
       userId: secondUserId,
       redis,
       pubsub,
+      userLoader: loader
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)
@@ -192,6 +197,7 @@ describe('Get paginated messages from a conversation', () => {
       userId: null,
       redis,
       pubsub,
+      userLoader: loader
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)
