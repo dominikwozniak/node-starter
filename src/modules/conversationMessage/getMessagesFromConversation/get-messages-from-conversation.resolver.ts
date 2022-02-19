@@ -7,6 +7,7 @@ import { authorization } from '@src/middleware/authorization.middleware'
 import { applyMiddleware } from '@src/middleware/apply-middleware'
 import { formatYupError } from '@src/utils/format-yup-error'
 import { GetMessagesFromConversationInput } from '@src/modules/conversationMessage/getMessagesFromConversation/get-messages-from-conversation.input'
+import { checkUserInConversation } from '@src/utils/conversation/check-user-in-conversation'
 
 const getMessagesFromConversationSchema = yup.object().shape({
   conversationId: yup.number().min(0),
@@ -35,21 +36,28 @@ const resolvers: ResolverMap = {
           throw new ApolloError('Authorization failed')
         }
 
-        // TODO: try-catch
-        const messages = await context.prisma.conversationMessage.findMany({
-          take: 10,
-          orderBy: {
-            createdAt: 'desc',
-          },
-          where: {
-            conversationId,
-          },
-          include: {
-            author: true,
-          },
-        })
+        await checkUserInConversation(
+          context,
+          conversationId,
+          'Cannot get messages from this conversation'
+        )
 
-        return messages
+        try {
+          return await context.prisma.conversationMessage.findMany({
+            take: 10,
+            orderBy: {
+              createdAt: 'desc',
+            },
+            where: {
+              conversationId,
+            },
+            include: {
+              author: true,
+            },
+          })
+        } catch (error) {
+          throw new ApolloError('Cannot get messages')
+        }
       }
     ),
   },

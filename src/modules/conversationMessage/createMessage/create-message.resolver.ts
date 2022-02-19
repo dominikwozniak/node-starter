@@ -8,6 +8,7 @@ import { applyMiddleware } from '@src/middleware/apply-middleware'
 import { formatYupError } from '@src/utils/format-yup-error'
 import { CreateMessageInput } from '@src/modules/conversationMessage/createMessage/create-message.input'
 import { PUBSUB_NEW_MESSAGE } from '@src/constants/pubsub.const'
+import { checkUserInConversation } from '@src/utils/conversation/check-user-in-conversation'
 
 const createMessageSchema = yup.object().shape({
   conversationId: yup.number().min(0),
@@ -32,6 +33,12 @@ const resolvers: ResolverMap = {
         if (!context.userId) {
           throw new ApolloError('Authorization failed')
         }
+
+        await checkUserInConversation(
+          context,
+          conversationId,
+          'Cannot create message in this conversation'
+        )
 
         try {
           const message = await context.prisma.conversationMessage.create({
