@@ -3,7 +3,7 @@ import argon2 from 'argon2'
 import { createTestClient } from 'apollo-server-testing'
 import { PrismaClient } from '@prisma/client'
 import { constructTestServer } from '@src/__tests__/utils/server'
-import { kickUserFromConversation } from '@src/__tests__/utils/mutations';
+import { kickUserFromConversation } from '@src/__tests__/utils/mutations'
 
 const client = new PrismaClient()
 const redis = new Redis()
@@ -84,7 +84,7 @@ describe('Kick user from conversation', () => {
       variables: {
         data: {
           conversationId: conversationId,
-          userId: secondUserId
+          userId: secondUserId,
         },
       },
     })
@@ -116,7 +116,7 @@ describe('Kick user from conversation', () => {
       variables: {
         data: {
           conversationId: conversationId,
-          userId
+          userId,
         },
       },
     })
@@ -131,7 +131,9 @@ describe('Kick user from conversation', () => {
     })
 
     expect(res.errors![0]).toBeDefined()
-    expect(res.errors![0].message).toBe('Cannot kick yourself from conversation')
+    expect(res.errors![0].message).toBe(
+      'Cannot kick yourself from conversation'
+    )
     expect(conversation).toBeDefined()
     expect(conversation!.participants.length).toBe(1)
   })
@@ -149,7 +151,7 @@ describe('Kick user from conversation', () => {
       variables: {
         data: {
           conversationId: conversationId,
-          userId
+          userId,
         },
       },
     })
@@ -182,7 +184,7 @@ describe('Kick user from conversation', () => {
       variables: {
         data: {
           conversationId: conversationId,
-          userId: secondUserId
+          userId: secondUserId,
         },
       },
     })

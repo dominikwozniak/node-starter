@@ -4,5 +4,5 @@ type Mutation {
 
 input CreateMessageInput {
   conversationId: Int!
-  text: String!
+  text: String
 }

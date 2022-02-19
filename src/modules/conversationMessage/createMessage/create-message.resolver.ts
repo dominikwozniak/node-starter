@@ -33,30 +33,33 @@ const resolvers: ResolverMap = {
           throw new ApolloError('Authorization failed')
         }
 
-        // TODO: try-catch
-        const message = await context.prisma.conversationMessage.create({
-          data: {
-            text,
-            author: {
-              connect: {
-                id: parseInt(context.userId),
+        try {
+          const message = await context.prisma.conversationMessage.create({
+            data: {
+              text,
+              author: {
+                connect: {
+                  id: parseInt(context.userId),
+                },
+              },
+              conversation: {
+                connect: {
+                  id: conversationId,
+                },
               },
             },
-            conversation: {
-              connect: {
-                id: conversationId,
-              },
+            include: {
+              author: true,
+              conversation: true,
             },
-          },
-          include: {
-            author: true,
-            conversation: true,
-          },
-        })
+          })
 
-        await context.pubsub.publish(PUBSUB_NEW_MESSAGE, {
-          newMessage: message,
-        })
+          await context.pubsub.publish(PUBSUB_NEW_MESSAGE, {
+            newMessage: message,
+          })
+        } catch (error) {
+          throw new ApolloError('Cannot send message')
+        }
 
         return true
       }
