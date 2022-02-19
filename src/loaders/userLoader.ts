@@ -1,6 +1,6 @@
 import DataLoader from 'dataloader'
 import { Prisma } from '@prisma/client'
-import { prismaClient } from '@src/utils/prisma';
+import { prismaClient } from '@src/utils/prisma'
 
 const user = Prisma.validator<Prisma.UserArgs>()({ include: {} })
 type User = Prisma.UserGetPayload<typeof user>
@@ -11,19 +11,19 @@ const batchUser: BatchUser = async (ids: number[]) => {
   const users = await prismaClient.user.findMany({
     where: {
       id: {
-        in: ids
-      }
+        in: ids,
+      },
     },
     include: {
       conversations: true,
-      messages: true
-    }
+      messages: true,
+    },
   })
 
   const userMap: { [key: number]: User } = {}
-  users.forEach(u => userMap[u.id] = u)
+  users.forEach((u) => (userMap[u.id] = u))
 
-  return ids.map(id => userMap[id])
+  return ids.map((id) => userMap[id])
 }
 
 // @ts-ignore
