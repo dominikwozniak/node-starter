@@ -1,0 +1,9 @@
+type Mutation {
+  updateConversation(data: UpdateConversationInput): Boolean!
+}
+
+input UpdateConversationInput {
+  conversationId: Int!
+  name: String
+  isPrivate: Boolean
+}

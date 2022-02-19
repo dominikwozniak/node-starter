@@ -1,0 +1,11 @@
+type Query {
+  getMessagesPaginatedFromConversation(
+    data: GetMessagesPaginatedFromConversationInput
+  ): [ConversationMessage]
+}
+
+input GetMessagesPaginatedFromConversationInput {
+  conversationId: Int!
+  skip: Int!
+  take: Int!
+}

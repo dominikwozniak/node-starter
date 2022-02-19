@@ -45,3 +45,49 @@ export const changePasswordMutation = gql`
     changePassword(data: $data)
   }
 `
+
+export const createConversationMutation = gql`
+  mutation createConversation($data: CreateConversationInput) {
+    createConversation(data: $data) {
+      id
+      name
+      isPrivate
+    }
+  }
+`
+
+export const updateConversationMutation = gql`
+  mutation updateConversation($data: UpdateConversationInput) {
+    updateConversation(data: $data)
+  }
+`
+
+export const joinToConversation = gql`
+  mutation joinToConversation($data: JoinToConversationInput) {
+    joinToConversation(data: $data)
+  }
+`
+
+export const addUserToConversation = gql`
+  mutation addUserToConversation($data: AddUserToConversationInput) {
+    addUserToConversation(data: $data)
+  }
+`
+
+export const leaveConversation = gql`
+  mutation leaveConversation($data: LeaveConversationInput) {
+    leaveConversation(data: $data)
+  }
+`
+
+export const kickUserFromConversation = gql`
+  mutation kickUserFromConversation($data: KickUserFromConversationInput) {
+    kickUserFromConversation(data: $data)
+  }
+`
+
+export const createMessageMutation = gql`
+  mutation createMessage($data: CreateMessageInput) {
+    createMessage(data: $data)
+  }
+`

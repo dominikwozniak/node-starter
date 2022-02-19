@@ -1,0 +1,4 @@
+type ConversationUser {
+  userId: Int
+  conversationId: Int
+}

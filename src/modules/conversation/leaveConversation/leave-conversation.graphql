@@ -1,0 +1,7 @@
+type Mutation {
+  leaveConversation(data: LeaveConversationInput): Boolean!
+}
+
+input LeaveConversationInput {
+  conversationId: Int!
+}

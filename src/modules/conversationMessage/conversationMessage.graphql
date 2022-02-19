@@ -1,0 +1,9 @@
+type ConversationMessage {
+  id: Int!
+  text: String
+  read: Boolean
+  author: User
+  conversation: Conversation
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}

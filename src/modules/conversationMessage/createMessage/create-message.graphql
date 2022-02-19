@@ -1,0 +1,8 @@
+type Mutation {
+  createMessage(data: CreateMessageInput): Boolean!
+}
+
+input CreateMessageInput {
+  conversationId: Int!
+  text: String
+}

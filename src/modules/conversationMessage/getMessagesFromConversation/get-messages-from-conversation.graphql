@@ -1,0 +1,9 @@
+type Query {
+  getMessagesFromConversation(
+    data: GetMessagesFromConversationInput
+  ): [ConversationMessage]
+}
+
+input GetMessagesFromConversationInput {
+  conversationId: Int!
+}

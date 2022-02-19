@@ -1,0 +1,7 @@
+type Subscription {
+  newMessage(data: NewMessageInput): ConversationMessage
+}
+
+input NewMessageInput {
+  conversationId: Int!
+}

@@ -1,0 +1,9 @@
+type Conversation {
+  id: Int!
+  name: String
+  isPrivate: Boolean
+  participants: [ConversationUser]
+  messages: [ConversationMessage]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
