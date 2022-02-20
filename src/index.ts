@@ -6,7 +6,6 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import * as http from 'http'
 import { ApolloServer } from 'apollo-server-express'
-import { execute, subscribe } from 'graphql'
 import { SubscriptionServer } from 'subscriptions-transport-ws'
 import {
   ApolloServerPluginDrainHttpServer,
@@ -18,6 +17,7 @@ import { schema } from '@src/utils/generate/generate-schema'
 import { context } from '@src/context'
 import { githubStrategy } from '@src/utils/passport/github-strategy'
 import { sessionMiddleware } from '@src/utils/session'
+import { subscriptionServerConfig } from '@src/utils/apollo/subscriptionServer.config'
 
 dotenv.config()
 
@@ -45,25 +45,7 @@ async function bootstrap() {
   )
 
   const subscriptionServer = SubscriptionServer.create(
-    {
-      schema,
-      execute,
-      subscribe,
-      onConnect: async (
-        _connectionParams: any,
-        _webSocket: any,
-        { request }: any
-      ) => {
-        const req = await new Promise((resolve) => {
-          // @ts-ignore
-          sessionMiddleware(request as Request, {} as Response, () => {
-            resolve(request)
-          })
-        })
-
-        return { req }
-      },
-    },
+    subscriptionServerConfig,
     { server: httpServer, path: '/graphql' }
   )
 

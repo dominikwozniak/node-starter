@@ -7,6 +7,7 @@ import { redis } from '@src/utils/redis'
 import { prismaClient } from '@src/utils/prisma'
 import { pubsub } from '@src/utils/pubsub'
 import { userLoader } from '@src/loaders/userLoader'
+import { conversationLoader } from '@src/loaders/conversationLoader'
 
 export interface Context {
   prisma: PrismaClient
@@ -16,6 +17,7 @@ export interface Context {
   pubsub: PubSub | RedisPubSub
   userId: string | null
   userLoader: ReturnType<typeof userLoader>
+  conversationLoader: ReturnType<typeof conversationLoader>
 }
 
 export const context = (ctx: Context) => {
@@ -24,6 +26,7 @@ export const context = (ctx: Context) => {
   ctx.redis = redis
   ctx.pubsub = pubsub
   ctx.userLoader = userLoader()
+  ctx.conversationLoader = conversationLoader()
 
   // @ts-ignore
   if (ctx.req.session[sessionUserId]) {

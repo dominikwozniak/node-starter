@@ -81,7 +81,7 @@ describe('Get all users conversations', () => {
       prisma: client,
       userId: userId,
       redis,
-      userLoader: loader
+      userLoader: loader,
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)
@@ -101,7 +101,7 @@ describe('Get all users conversations', () => {
       prisma: client,
       userId: secondUserId,
       redis,
-      userLoader: loader
+      userLoader: loader,
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)
@@ -117,7 +117,7 @@ describe('Get all users conversations', () => {
       prisma: client,
       userId: null,
       redis,
-      userLoader: loader
+      userLoader: loader,
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)

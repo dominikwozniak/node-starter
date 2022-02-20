@@ -4,13 +4,15 @@ import { PubSub } from 'graphql-subscriptions'
 import { createTestClient } from 'apollo-server-testing'
 import { PrismaClient } from '@prisma/client'
 import { userLoader } from '@src/loaders/userLoader'
+import { conversationLoader } from '@src/loaders/conversationLoader'
 import { constructTestServer } from '@src/__tests__/utils/server'
 import { getMessagesPaginatedFromConversation } from '@src/__tests__/utils/queries'
 
 const client = new PrismaClient()
 const redis = new Redis()
 const pubsub = new PubSub()
-const loader = userLoader()
+const uLoader = userLoader()
+const cLoader = conversationLoader()
 
 const userId = 1
 const userName = 'test'
@@ -103,7 +105,8 @@ describe('Get paginated messages from a conversation', () => {
       userId,
       redis,
       pubsub,
-      userLoader: loader,
+      userLoader: uLoader,
+      conversationLoader: cLoader,
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)
@@ -133,7 +136,8 @@ describe('Get paginated messages from a conversation', () => {
       userId,
       redis,
       pubsub,
-      userLoader: loader,
+      userLoader: uLoader,
+      conversationLoader: cLoader,
     })
 
     // @ts-ignore
@@ -170,7 +174,8 @@ describe('Get paginated messages from a conversation', () => {
       userId: secondUserId,
       redis,
       pubsub,
-      userLoader: loader,
+      userLoader: uLoader,
+      conversationLoader: cLoader,
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)
@@ -197,7 +202,8 @@ describe('Get paginated messages from a conversation', () => {
       userId: null,
       redis,
       pubsub,
-      userLoader: loader,
+      userLoader: uLoader,
+      conversationLoader: cLoader,
     })
     // @ts-ignore
     const { mutate } = createTestClient(server)

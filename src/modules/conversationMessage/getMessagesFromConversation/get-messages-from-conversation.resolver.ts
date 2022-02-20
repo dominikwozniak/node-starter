@@ -51,9 +51,9 @@ const resolvers: ResolverMap = {
             where: {
               conversationId,
             },
-            include: {
-              author: true,
-            },
+            // include: {
+            //   author: true
+            // },
           })
         } catch (error) {
           throw new ApolloError('Cannot get messages')
