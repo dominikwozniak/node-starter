@@ -31,5 +31,6 @@ const batchConversation: BatchConversation = async (ids: number[]) => {
   return ids.map((id) => conversationMap[id])
 }
 
-// @ts-ignore
-export const conversationLoader = () => new DataLoader<number, Conversation>(batchConversation)
+export const conversationLoader = () =>
+  // @ts-ignore
+  new DataLoader<number, Conversation>(batchConversation)

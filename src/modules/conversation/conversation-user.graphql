@@ -1,5 +1,6 @@
 type ConversationUser {
   user: User
   userId: Int
+  conversation: Conversation
   conversationId: Int
 }
