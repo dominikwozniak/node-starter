@@ -1,0 +1,7 @@
+type Mutation {
+  deletePost(data: DeletePostInput): Boolean!
+}
+
+input DeletePostInput {
+  postId: Int!
+}

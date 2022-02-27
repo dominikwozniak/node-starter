@@ -19,8 +19,8 @@ const resolvers: ResolverMap = {
               userId: parseInt(context.userId),
             },
             orderBy: {
-              createdAt: 'desc'
-            }
+              createdAt: 'desc',
+            },
           })
         } catch (error) {
           throw new ApolloError('Cannot get posts')

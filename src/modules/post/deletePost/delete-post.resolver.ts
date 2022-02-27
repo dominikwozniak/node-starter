@@ -6,29 +6,27 @@ import { Context } from '@src/context'
 import { ResolverMap } from '@src/utils/graphql-types'
 import { authorization } from '@src/middleware/authorization.middleware'
 import { applyMiddleware } from '@src/middleware/apply-middleware'
-import { UpdatePostInput } from '@src/modules/post/updatePost/update-post.input'
 import { formatYupError } from '@src/utils/format-yup-error'
+import { DeletePostInput } from '@src/modules/post/deletePost/delete-post.input'
 
-const updatePostSchema = yup.object().shape({
+const deletePostSchema = yup.object().shape({
   postId: yup.number().min(0),
-  title: yup.string(),
-  content: yup.string(),
 })
 
 const resolvers: ResolverMap = {
   Mutation: {
-    updatePost: applyMiddleware(
+    deletePost: applyMiddleware(
       authorization,
-      async (_parent, args: { data: UpdatePostInput }, context: Context) => {
+      async (_parent, args: { data: DeletePostInput }, context: Context) => {
         const { postId } = args.data
 
         try {
-          await updatePostSchema.validate(args.data, {
+          await deletePostSchema.validate(args.data, {
             abortEarly: false,
           })
         } catch (error) {
           throw new UserInputError(
-            'Cannot update post with provided data',
+            'Cannot delete post with provided data',
             formatYupError(error)
           )
         }
@@ -48,16 +46,13 @@ const resolvers: ResolverMap = {
         }
 
         try {
-          await context.prisma.post.update({
+          await context.prisma.post.delete({
             where: {
               id: postId,
-            },
-            data: {
-              ...omit(args.data, ['postId']),
-            },
+            }
           })
         } catch (error) {
-          throw new ApolloError('Cannot update post')
+          throw new ApolloError('Cannot delete post')
         }
 
         return true
