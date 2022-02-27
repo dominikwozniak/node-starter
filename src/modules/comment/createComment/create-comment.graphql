@@ -1,0 +1,8 @@
+type Mutation {
+  createComment(data: CreateCommentInput): Comment!
+}
+
+input CreateCommentInput {
+  postId: Int
+  text: String
+}

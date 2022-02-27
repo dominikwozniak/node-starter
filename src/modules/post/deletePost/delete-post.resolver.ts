@@ -49,7 +49,7 @@ const resolvers: ResolverMap = {
           await context.prisma.post.delete({
             where: {
               id: postId,
-            }
+            },
           })
         } catch (error) {
           throw new ApolloError('Cannot delete post')
