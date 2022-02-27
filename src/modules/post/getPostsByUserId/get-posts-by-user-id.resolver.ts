@@ -6,38 +6,38 @@ import { ResolverMap } from '@src/utils/graphql-types'
 import { authorization } from '@src/middleware/authorization.middleware'
 import { applyMiddleware } from '@src/middleware/apply-middleware'
 import { formatYupError } from '@src/utils/format-yup-error'
-import { GetPostByIdInput } from '@src/modules/post/getPostById/get-post-by-id.input'
+import { GetPostsByUserIdInput } from '@src/modules/post/getPostsByUserId/get-posts-by-user-id.input'
 
-const getPostByIdSchema = yup.object().shape({
-  id: yup.number()
+const getPostsByIdSchema = yup.object().shape({
+  id: yup.number(),
 })
 
 const resolvers: ResolverMap = {
   Query: {
-    getPostById: applyMiddleware(
+    getPostsByUserId: applyMiddleware(
       authorization,
-      async (_parent, args: { data: GetPostByIdInput }, context: Context) => {
-        const { id } = args.data
+      async (_parent, args: { data: GetPostsByUserIdInput }, context: Context) => {
+        const { userId } = args.data
 
         try {
-          await getPostByIdSchema.validate(args.data, {
+          await getPostsByIdSchema.validate(args.data, {
             abortEarly: false,
           })
         } catch (error) {
           throw new UserInputError(
-            'Cannot get post with provided id',
+            'Cannot get posts for provided user',
             formatYupError(error)
           )
         }
 
         try {
-          return await context.prisma.post.findFirst({
+          return await context.prisma.post.findMany({
             where: {
-              id,
+              userId
             },
           })
         } catch (error) {
-          throw new ApolloError('Cannot get post')
+          throw new ApolloError('Cannot get posts')
         }
       }
     ),

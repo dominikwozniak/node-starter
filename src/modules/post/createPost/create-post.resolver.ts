@@ -1,10 +1,10 @@
 import * as yup from 'yup'
 import { ApolloError } from 'apollo-server-core'
+import { UserInputError } from 'apollo-server'
 import { Context } from '@src/context'
 import { ResolverMap } from '@src/utils/graphql-types'
 import { authorization } from '@src/middleware/authorization.middleware'
 import { applyMiddleware } from '@src/middleware/apply-middleware'
-import { UserInputError } from 'apollo-server'
 import { formatYupError } from '@src/utils/format-yup-error'
 import { CreatePostInput } from '@src/modules/post/createPost/create-post.input'
 
