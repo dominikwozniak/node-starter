@@ -1,0 +1,9 @@
+type Mutation {
+  updatePost(data: UpdatePostInput): Boolean!
+}
+
+input UpdatePostInput {
+  postId: Int!
+  title: String
+  content: String
+}

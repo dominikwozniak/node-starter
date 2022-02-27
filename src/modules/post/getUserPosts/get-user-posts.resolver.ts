@@ -8,11 +8,7 @@ const resolvers: ResolverMap = {
   Query: {
     getUserPosts: applyMiddleware(
       authorization,
-      async (
-        _parent,
-        _args,
-        context: Context
-      ) => {
+      async (_parent, _args, context: Context) => {
         if (!context.userId) {
           throw new ApolloError('Authorization failed')
         }
@@ -22,6 +18,9 @@ const resolvers: ResolverMap = {
             where: {
               userId: parseInt(context.userId),
             },
+            orderBy: {
+              createdAt: 'desc'
+            }
           })
         } catch (error) {
           throw new ApolloError('Cannot get posts')
