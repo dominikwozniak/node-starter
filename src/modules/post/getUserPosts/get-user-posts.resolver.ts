@@ -21,6 +21,9 @@ const resolvers: ResolverMap = {
             orderBy: {
               createdAt: 'desc',
             },
+            include: {
+              comments: true
+            }
           })
         } catch (error) {
           throw new ApolloError('Cannot get posts')

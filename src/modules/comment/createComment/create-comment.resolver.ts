@@ -41,19 +41,19 @@ const resolvers: ResolverMap = {
               text,
               user: {
                 connect: {
-                  id: parseInt(context.userId)
-                }
+                  id: parseInt(context.userId),
+                },
               },
               post: {
                 connect: {
-                  id: postId
-                }
-              }
+                  id: postId,
+                },
+              },
             },
             include: {
               user: true,
               post: true,
-            }
+            },
           })
         } catch (error) {
           throw new ApolloError('Cannot create post')
