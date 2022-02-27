@@ -16,7 +16,11 @@ const resolvers: ResolverMap = {
   Query: {
     getPostsByUserId: applyMiddleware(
       authorization,
-      async (_parent, args: { data: GetPostsByUserIdInput }, context: Context) => {
+      async (
+        _parent,
+        args: { data: GetPostsByUserIdInput },
+        context: Context
+      ) => {
         const { userId } = args.data
 
         try {
@@ -33,7 +37,7 @@ const resolvers: ResolverMap = {
         try {
           return await context.prisma.post.findMany({
             where: {
-              userId
+              userId,
             },
           })
         } catch (error) {

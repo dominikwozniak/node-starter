@@ -9,7 +9,7 @@ import { formatYupError } from '@src/utils/format-yup-error'
 import { GetPostByIdInput } from '@src/modules/post/getPostById/get-post-by-id.input'
 
 const getPostByIdSchema = yup.object().shape({
-  id: yup.number()
+  id: yup.number(),
 })
 
 const resolvers: ResolverMap = {
