@@ -6,7 +6,7 @@ import { authorization } from '@src/middleware/authorization.middleware'
 import { applyMiddleware } from '@src/middleware/apply-middleware'
 import { UserInputError } from 'apollo-server'
 import { formatYupError } from '@src/utils/format-yup-error'
-import { CreatePostInput } from '@src/modules/post/createPost/create-post.input';
+import { CreatePostInput } from '@src/modules/post/createPost/create-post.input'
 
 const createPostSchema = yup.object().shape({
   title: yup.string(),
@@ -17,11 +17,7 @@ const resolvers: ResolverMap = {
   Mutation: {
     createPost: applyMiddleware(
       authorization,
-      async (
-        _parent,
-        args: { data: CreatePostInput },
-        context: Context
-      ) => {
+      async (_parent, args: { data: CreatePostInput }, context: Context) => {
         const { title, content } = args.data
 
         try {

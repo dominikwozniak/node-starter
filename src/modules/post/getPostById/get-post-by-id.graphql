@@ -1,0 +1,7 @@
+type Query {
+  getPostById(data: GetPostByIdInput): Post!
+}
+
+input GetPostByIdInput {
+  id: Int
+}
