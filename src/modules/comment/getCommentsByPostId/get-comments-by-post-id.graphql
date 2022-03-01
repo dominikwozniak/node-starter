@@ -1,0 +1,7 @@
+type Query {
+  getCommentsByPostId(data: GetCommentsByPostIdInput): [Comment!]
+}
+
+input GetCommentsByPostIdInput {
+  postId: Int
+}

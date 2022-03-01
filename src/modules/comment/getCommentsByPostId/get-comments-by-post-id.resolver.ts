@@ -6,45 +6,41 @@ import { ResolverMap } from '@src/utils/graphql-types'
 import { authorization } from '@src/middleware/authorization.middleware'
 import { applyMiddleware } from '@src/middleware/apply-middleware'
 import { formatYupError } from '@src/utils/format-yup-error'
-import { GetPostsByUserIdInput } from '@src/modules/post/getPostsByUserId/get-posts-by-user-id.input'
+import { GetCommentsByPostIdInput } from '@src/modules/comment/getCommentsByPostId/get-comments-by-post-id.input'
 
-const getPostsByIdSchema = yup.object().shape({
-  id: yup.number(),
+const getCommentsByPostIdSchema = yup.object().shape({
+  postId: yup.number(),
 })
 
 const resolvers: ResolverMap = {
   Query: {
-    getPostsByUserId: applyMiddleware(
+    getCommentsByPostId: applyMiddleware(
       authorization,
-      async (
-        _parent,
-        args: { data: GetPostsByUserIdInput },
-        context: Context
-      ) => {
-        const { userId } = args.data
+      async (_parent, args: { data: GetCommentsByPostIdInput }, context: Context) => {
+        const { postId } = args.data
 
         try {
-          await getPostsByIdSchema.validate(args.data, {
+          await getCommentsByPostIdSchema.validate(args.data, {
             abortEarly: false,
           })
         } catch (error) {
           throw new UserInputError(
-            'Cannot get posts for provided user',
+            'Cannot get comments with provided post id',
             formatYupError(error)
           )
         }
 
         try {
-          return await context.prisma.post.findMany({
+          return await context.prisma.comment.findMany({
             where: {
-              userId,
+              postId
             },
             include: {
-              comments: true,
-            },
+              user: true
+            }
           })
         } catch (error) {
-          throw new ApolloError('Cannot get posts')
+          throw new ApolloError('Cannot get post')
         }
       }
     ),

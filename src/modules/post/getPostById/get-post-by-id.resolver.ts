@@ -38,7 +38,7 @@ const resolvers: ResolverMap = {
             include: {
               user: true,
               comments: true,
-            }
+            },
           })
         } catch (error) {
           throw new ApolloError('Cannot get post')

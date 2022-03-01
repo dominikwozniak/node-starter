@@ -22,8 +22,8 @@ const resolvers: ResolverMap = {
               createdAt: 'desc',
             },
             include: {
-              comments: true
-            }
+              comments: true,
+            },
           })
         } catch (error) {
           throw new ApolloError('Cannot get posts')
